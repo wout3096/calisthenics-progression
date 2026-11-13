@@ -40,7 +40,8 @@ button.delete{background:transparent;color:#ffb9b9;border:1px solid #784747;bord
 <section id="skills" class="hidden">
  <h2>Exercise library</h2><p class="muted">Search by exercise or filter by training area. Select an exercise to see a suggested progression path and coaching reminders.</p>
  <div class="filters"><input id="search" type="search" placeholder="Search exercises…"><select id="category"><option value="All">All areas</option></select></div>
- <div id="skillList"></div>
+<div id="skillList"></div>
+<div id="skillDetail" class="panel hidden"></div>
 </section>
 <section id="log" class="hidden">
  <h2>Log a session</h2><div class="panel"><form id="logForm">
@@ -117,14 +118,124 @@ const $=id=>document.getElementById(id);
 let sessions=[];
 try{const saved=JSON.parse(localStorage.getItem("cp_sessions")||"[]");sessions=Array.isArray(saved)?saved:[]}catch(e){sessions=[]}
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function renderSkills(){
- const term=$("search").value.trim().toLowerCase(), area=$("category").value;
- const filtered=exercises.filter(x=>(area==="All"||x.area===area)&&(`${x.name} ${x.area} ${x.desc} ${x.steps.join(" ")}`).toLowerCase().includes(term));
- $("skillList").innerHTML=filtered.length?filtered.map((x)=>`<article class="exercise-card">
- <div class="skill"><div><button type="button" class="exercise-title" data-exercise="${esc(x.name)}">${esc(x.name)}</button><div><span class="pill">${esc(x.area)}</span><span class="pill">${esc(x.level)}</span></div></div></div>
- <p class="muted">${esc(x.desc)}</p><button type="button" data-exercise="${esc(x.name)}" data-toggle-label>View progression</button>
- <div class="detail hidden" id="detail-${exercises.indexOf(x)}"><strong>Suggested progression</strong><ol class="steps">${x.steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol><p class="small muted"><strong>Reminder:</strong> ${esc(x.tip)}</p><button type="button" data-log="${esc(x.name)}">Log this exercise</button></div></article>`).join(""):'<p class="muted">No exercises match that search.</p>';
+function renderSkills() {
+  $("skillList").innerHTML = skills.map(([name, description]) => `
+    <button class="panel skill skill-card"
+      type="button"
+      data-skill="${escapeHtml(name)}"
+      style="width:100%;text-align:left;color:white;font:inherit;cursor:pointer">
+
+      <div>
+        <strong>${escapeHtml(name)}</strong>
+        <div class="muted">${escapeHtml(description)}</div>
+      </div>
+
+      <span class="tag">Open →</span>
+    </button>
+  `).join("");
 }
+ const progressions = {
+  "Muscle-up": [
+    "Pull-up",
+    "High pull-up",
+    "Chest-to-bar pull-up",
+    "Assisted transition",
+    "Assisted muscle-up",
+    "Muscle-up"
+  ],
+
+  "Handstand": [
+    "Pike hold",
+    "Wall plank",
+    "Wall-supported handstand",
+    "Wall balance practice",
+    "Freestanding handstand"
+  ],
+
+  "Handstand push-up": [
+    "Pike push-up",
+    "Elevated pike push-up",
+    "Wall handstand hold",
+    "Partial handstand push-up",
+    "Wall handstand push-up"
+  ],
+
+  "Pull-up": [
+    "Dead hang",
+    "Scapular pull-up",
+    "Assisted pull-up",
+    "Negative pull-up",
+    "Pull-up",
+    "Weighted pull-up"
+  ],
+
+  "Dip": [
+    "Incline push-up",
+    "Support hold",
+    "Assisted dip",
+    "Negative dip",
+    "Full dip",
+    "Weighted dip"
+  ],
+
+  "Core": [
+    "Plank",
+    "Hollow body hold",
+    "Dead bug",
+    "Hanging knee raise",
+    "Hanging leg raise",
+    "L-sit"
+  ]
+};
+
+$("skillList").addEventListener("click", function(event) {
+  const button = event.target.closest("[data-skill]");
+  if (!button) return;
+
+  const name = button.dataset.skill;
+  const stages = progressions[name] || ["Beginner variation", "Intermediate variation", "Advanced variation"];
+
+  $("skillList").classList.add("hidden");
+  $("skillDetail").classList.remove("hidden");
+
+  $("skillDetail").innerHTML = `
+    <button type="button" class="delete" id="backSkills">
+      ← Back to skills
+    </button>
+
+    <h2>${escapeHtml(name)}</h2>
+
+    <h3>Exercise progression</h3>
+
+    ${stages.map((stage, index) => `
+      <div class="entry">
+        <strong>Level ${index + 1}</strong>
+        <p>${escapeHtml(stage)}</p>
+      </div>
+    `).join("")}
+
+    <p class="notice">
+      Progress at your own pace. Focus on controlled technique
+      and allow enough recovery between sessions.
+    </p>
+
+    <button class="primary" id="logSkill" type="button">
+      Log this exercise
+    </button>
+  `;
+
+  $("backSkills").addEventListener("click", function() {
+    $("skillDetail").classList.add("hidden");
+    $("skillList").classList.remove("hidden");
+  });
+
+  $("logSkill").addEventListener("click", function() {
+    $("skill").value = name;
+    $("skillDetail").classList.add("hidden");
+    $("skillList").classList.remove("hidden");
+    showTab("log");
+  });
+});
 function renderHistory(){
  $("total").textContent=sessions.length;$("progressTotal").textContent=sessions.length;
  $("history").innerHTML=sessions.length?[...sessions].reverse().map((s,r)=>{const i=sessions.length-1-r;return `<div class="entry"><div class="skill"><strong>${esc(s.skill||"Training")}</strong><span class="tag">${esc(s.date||"")}</span></div><div class="muted">${s.sets?esc(s.sets)+" sets · ":""}${esc(s.reps||"No reps/time entered")}</div>${s.notes?`<p>${esc(s.notes)}</p>`:""}<button class="delete" type="button" data-delete="${i}">Delete</button></div>`}).join(""):'<p class="muted">No sessions yet. Log your first session.</p>';
