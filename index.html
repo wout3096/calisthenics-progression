@@ -43,5 +43,10 @@ document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()
 $('date').value=new Date().toISOString().slice(0,10);$('logForm').addEventListener('submit',e=>{e.preventDefault();sessions.push({date:$('date').value,skill:$('skill').value,sets:$('sets').value,reps:$('reps').value,notes:$('notes').value});save();e.target.reset();$('date').value=new Date().toISOString().slice(0,10);document.querySelector('[data-tab="progress"]').click();});
 $('clearAll').addEventListener('click',()=>{if(confirm('Delete every session saved on this device?')){sessions=[];save();}});renderSkills();renderHistory();
 </script>
+ <script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js");
+}
+</script>
 </body>
 </html>
