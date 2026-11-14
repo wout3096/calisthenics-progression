@@ -1,212 +1,28 @@
-const $ = id => document.getElementById(id);
-
-// HTML safety
-function esc(v) {
-  return String(v ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  }[c]));
-}
-
-// Load saved sessions
-let sessions = [];
-let completedStages = {};
-
-try {
-  sessions = JSON.parse(localStorage.getItem("cp_sessions") || "[]");
-  completedStages = JSON.parse(localStorage.getItem("cp_stages") || "{}");
-
-  if (!Array.isArray(sessions)) sessions = [];
-  if (!completedStages || typeof completedStages !== "object") completedStages = {};
-} catch(e) {
-  sessions = [];
-  completedStages = {};
-}
-
-// Progression paths
-const progressions = {
-  "Muscle-up": [
-    "Strict pull-up foundation",
-    "High pull-up",
-    "Chest-to-bar pull-up",
-    "Assisted transition",
-    "Assisted muscle-up",
-    "Muscle-up"
-  ],
-
-  "Handstand": [
-    "Wrist and shoulder preparation",
-    "Pike hold",
-    "Wall-supported handstand",
-    "Wall weight shifts",
-    "Freestanding balance practice"
-  ],
-
-  "Handstand push-up": [
-    "Pike hold",
-    "Pike push-up",
-    "Feet-elevated pike push-up",
-    "Wall-supported handstand hold",
-    "Partial wall-supported push-up",
-    "Wall handstand push-up"
-  ],
-
-  "Pull-up": [
-    "Active hang",
-    "Scapular pull-up",
-    "Assisted pull-up",
-    "Negative pull-up",
-    "Band-assisted pull-up",
-    "Full pull-up"
-  ],
-
-  "Dip": [
-    "Support hold",
-    "Foot-assisted dip",
-    "Small-range dip",
-    "Controlled full dip",
-    "Tempo dip"
-  ],
-
-  "Front lever": [
-    "Tuck front lever",
-    "Advanced tuck",
-    "One-leg front lever",
-    "Straddle front lever",
-    "Full front lever"
-  ],
-
-  "Back lever": [
-    "Tuck back lever",
-    "Advanced tuck",
-    "Straddle back lever",
-    "Full back lever"
-  ],
-
-  "Planche": [
-    "Planche lean",
-    "Frog stand",
-    "Tuck planche",
-    "Advanced tuck planche",
-    "Straddle planche",
-    "Full planche"
-  ],
-
-  "L-sit": [
-    "Seated knee lifts",
-    "Tuck support",
-    "One-leg L-sit",
-    "Full L-sit"
-  ],
-
-  "V-sit": [
-    "Tuck support",
-    "L-sit",
-    "Compression lifts",
-    "V-sit preparation"
-  ],
-
-  "Human flag": [
-    "Side plank",
-    "Side-body strength preparation",
-    "Assisted flag position"
-  ],
-
-  "Pistol squat": [
-    "Supported single-leg squat",
-    "Box pistol squat",
-    "Assisted pistol squat",
-    "Controlled pistol squat"
-  ],
-
-  "Hollow-body hold": [
-    "Dead bug",
-    "Tuck hollow hold",
-    "One-leg hollow hold",
-    "Full hollow hold"
-  ]
-};
-
-// Render exercise library
-function renderSkills() {
-
-  const search = $("search").value.toLowerCase();
-  const category = $("category").value;
-
-  const filtered = exercises.filter(exercise => {
-
-    const matchesSearch =
-      exercise.name.toLowerCase().includes(search) ||
-      exercise.area.toLowerCase().includes(search);
-
-    const matchesCategory =
-      category === "All" || exercise.area === category;
-
-    return matchesSearch && matchesCategory;
-  });
-
-  $("skillList").innerHTML = filtered.map(exercise => `
-    <article class="exercise-card">
-
-      <button
-        type="button"
-        class="exercise-title"
-        data-open="${esc(exercise.name)}">
-
-        ${esc(exercise.name)} →
-
-      </button>
-
-      <div>
-        <span class="pill">${esc(exercise.area)}</span>
-        <span class="pill">${esc(exercise.level)}</span>
-      </div>
-
-      <p class="muted">${esc(exercise.desc)}</p>
-
-      <button
-        type="button"
-        data-open="${esc(exercise.name)}">
-
-        View progression
-      </button>
-
-    </article>
-  `).join("");
-
-  if (!filtered.length) {
-    $("skillList").innerHTML =
-      '<p class="muted">No exercises found.</p>';
-  }
-}
-
-// Open individual exercise
+```javascript
 function openExercise(name) {
 
-  const exercise = exercises.find(x => x.name === name);
+  const exercise = exercises.find(
+    x => x.name.trim().toLowerCase() ===
+         name.trim().toLowerCase()
+  );
 
-  if (!exercise) return;
+  if (!exercise) {
+    console.error("Exercise not found:", name);
+    alert("Could not find exercise: " + name);
+    return;
+  }
 
-  const stages =
-    progressions[name] || exercise.steps;
+  const stages = progressions[exercise.name] || exercise.steps || [];
 
-  const saved = completedStages[name] || [];
+  const saved = completedStages[exercise.name] || [];
 
   $("skillList").classList.add("hidden");
   $("skillDetail").classList.remove("hidden");
 
   $("skillDetail").innerHTML = `
 
-    <button
-      type="button"
-      class="delete"
-      id="backSkills">
-
+    <button type="button" class="delete" id="backSkills">
       ← Back to library
-
     </button>
 
     <h2>${esc(exercise.name)}</h2>
@@ -237,11 +53,8 @@ function openExercise(name) {
               ${saved.includes(index) ? "checked" : ""}>
 
             <span>
-
               <strong>Level ${index + 1}</strong>
-
               <div>${esc(stage)}</div>
-
             </span>
 
           </label>
@@ -253,47 +66,28 @@ function openExercise(name) {
     </div>
 
     <div class="panel">
-
       <strong>Progress</strong>
-
       <p id="stageCount">
         ${saved.length} / ${stages.length} stages completed
       </p>
-
     </div>
 
     <div class="notice">
-
       <strong>Training reminder</strong>
-
-      <p>${esc(exercise.tip)}</p>
-
-      Progress at your own pace. These stages are suggestions,
-      not requirements. Prioritise controlled technique,
-      recovery and appropriate supervision.
-
+      <p>${esc(exercise.tip || "Focus on controlled technique and gradual progress.")}</p>
     </div>
 
-    <button
-      type="button"
-      class="primary"
-      id="logExercise">
-
+    <button type="button" class="primary" id="logExercise">
       Log this exercise
-
     </button>
 
   `;
 
-  // Back button
   $("backSkills").addEventListener("click", () => {
-
     $("skillDetail").classList.add("hidden");
     $("skillList").classList.remove("hidden");
-
   });
 
-  // Save completed progression stages
   $("progressionStages").addEventListener("change", () => {
 
     const checked = [
@@ -302,7 +96,7 @@ function openExercise(name) {
       )
     ].map(input => Number(input.dataset.stage));
 
-    completedStages[name] = checked;
+    completedStages[exercise.name] = checked;
 
     localStorage.setItem(
       "cp_stages",
@@ -314,203 +108,10 @@ function openExercise(name) {
 
   });
 
-  // Log exercise
   $("logExercise").addEventListener("click", () => {
-
-    $("skill").value = name;
-
+    $("skill").value = exercise.name;
     showTab("log");
-
   });
 
 }
-
-// Exercise button click handler
-$("skillList").addEventListener("click", event => {
-
-  const button = event.target.closest("[data-open]");
-
-  if (!button) return;
-
-  openExercise(button.dataset.open);
-
-});
-
-// Navigation
-function showTab(name) {
-
-  document.querySelectorAll("main section").forEach(section => {
-
-    section.classList.toggle(
-      "hidden",
-      section.id !== name
-    );
-
-  });
-
-  document.querySelectorAll("[data-tab]").forEach(button => {
-
-    button.classList.toggle(
-      "active",
-      button.dataset.tab === name
-    );
-
-  });
-
-  window.scrollTo({top:0, behavior:"smooth"});
-
-}
-
-window.openCalisthenicsTab = showTab;
-
-// Categories
-const areas = [
-  ...new Set(exercises.map(x => x.area))
-].sort();
-
-areas.forEach(area => {
-
-  $("category").add(new Option(area, area));
-
-});
-
-// Exercise selector
-$("skill").innerHTML =
-  exercises.map(x =>
-    `<option>${esc(x.name)}</option>`
-  ).join("") +
-  '<option>General strength</option>';
-
-// Search
-$("search").addEventListener("input", renderSkills);
-
-$("category").addEventListener("change", renderSkills);
-
-// Session history
-function renderHistory() {
-
-  $("total").textContent = sessions.length;
-
-  $("progressTotal").textContent = sessions.length;
-
-  $("skillsCount").textContent = exercises.length;
-
-  $("history").innerHTML = sessions.length
-    ? [...sessions].reverse().map((session, reverseIndex) => {
-
-        const index = sessions.length - 1 - reverseIndex;
-
-        return `
-
-          <div class="entry">
-
-            <div class="skill">
-
-              <strong>${esc(session.skill)}</strong>
-
-              <span class="tag">${esc(session.date)}</span>
-
-            </div>
-
-            <p class="muted">
-
-              ${session.sets ? esc(session.sets) + " sets · " : ""}
-              ${esc(session.reps || "No reps entered")}
-
-            </p>
-
-            ${session.notes ? `<p>${esc(session.notes)}</p>` : ""}
-
-            <button
-              class="delete"
-              data-delete="${index}"
-              type="button">
-
-              Delete
-
-            </button>
-
-          </div>
-
-        `;
-
-      }).join("")
-
-    : '<p class="muted">No sessions yet.</p>';
-
-}
-
-// Save sessions
-function save() {
-
-  localStorage.setItem(
-    "cp_sessions",
-    JSON.stringify(sessions)
-  );
-
-  renderHistory();
-
-}
-
-// Delete individual sessions
-$("history").addEventListener("click", event => {
-
-  const button = event.target.closest("[data-delete]");
-
-  if (!button) return;
-
-  const index = Number(button.dataset.delete);
-
-  if (index >= 0 && index < sessions.length) {
-
-    sessions.splice(index, 1);
-
-    save();
-
-  }
-
-});
-
-// Save training session
-$("logForm").addEventListener("submit", event => {
-
-  event.preventDefault();
-
-  sessions.push({
-
-    date: $("date").value,
-    skill: $("skill").value,
-    sets: $("sets").value,
-    reps: $("reps").value,
-    notes: $("notes").value
-
-  });
-
-  save();
-
-  event.target.reset();
-
-  $("date").value = new Date().toLocaleDateString("en-CA");
-
-  showTab("progress");
-
-});
-
-// Delete all sessions
-$("clearAll").addEventListener("click", () => {
-
-  if (confirm("Delete all saved sessions?")) {
-
-    sessions = [];
-
-    save();
-
-  }
-
-});
-
-// Initial setup
-$("date").value = new Date().toLocaleDateString("en-CA");
-
-renderSkills();
-renderHistory();
+```
