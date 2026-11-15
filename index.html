@@ -748,11 +748,12 @@ function renderLevels() {
   }).join("");
 }
 
+/* CHECKING SKILLS DOES NOT ADD WORKOUTS */
+
 document.getElementById("levels").addEventListener("change",event=>{
   if(!event.target.matches("[data-exercise]")) return;
 
   const id=Number(event.target.dataset.exercise);
-  const exerciseName=flatExercises(currentSkill)[id];
 
   if(!completed[currentSkill.name]) {
     completed[currentSkill.name]=[];
@@ -761,14 +762,6 @@ document.getElementById("levels").addEventListener("change",event=>{
   if(event.target.checked) {
     if(!completed[currentSkill.name].includes(id)) {
       completed[currentSkill.name].push(id);
-
-      workouts.unshift({
-        id:Date.now(),
-        date:today(),
-        exercise:currentSkill.name+" - "+exerciseName,
-        type:"progression",
-        notes:"Skill progression completed!"
-      });
     }
   } else {
     completed[currentSkill.name]=
@@ -776,14 +769,17 @@ document.getElementById("levels").addEventListener("change",event=>{
   }
 
   save();
+
   renderLevels();
+  renderSkills();
+  renderProgress();
 });
 
 document.getElementById("back").addEventListener("click",()=>{
   showScreen("skills");
 });
 
-/* WORKOUT LOG */
+/* WORKOUT LOG - MANUAL ENTRIES ONLY */
 
 document.getElementById("date").value=today();
 
