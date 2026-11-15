@@ -774,21 +774,34 @@ ${escapeHTML(exercise)}
 }
 
 document.getElementById("levels").addEventListener("change",e=>{
-if(!e.target.matches("[data-exercise]"))return;
+  if(!e.target.matches("[data-exercise]"))return;
 
-const id=Number(e.target.dataset.exercise);
-if(!completed[currentSkill.name])completed[currentSkill.name]=[];
+  const id=Number(e.target.dataset.exercise);
+  const exerciseName=flatExercises(currentSkill)[id];
 
-if(e.target.checked){
-if(!completed[currentSkill.name].includes(id)){
-completed[currentSkill.name].push(id);
-}
-}else{
-completed[currentSkill.name]=completed[currentSkill.name].filter(x=>x!==id);
-}
+  if(!completed[currentSkill.name]){
+    completed[currentSkill.name]=[];
+  }
 
-save();
-renderLevels();
+  if(e.target.checked){
+    if(!completed[currentSkill.name].includes(id)){
+      completed[currentSkill.name].push(id);
+
+      // Automatically add completion to workout log
+      workouts.unshift({
+        id:Date.now(),
+        date:new Date().toLocaleDateString("en-CA"),
+        exercise:currentSkill.name+" - "+exerciseName,
+        type:"progression",
+        notes:"Skill progression completed!"
+      });
+    }
+  }else{
+    completed[currentSkill.name]=completed[currentSkill.name].filter(x=>x!==id);
+  }
+
+  save();
+  renderLevels();
 });
 
 document.getElementById("back").addEventListener("click",()=>showScreen("skills"));
