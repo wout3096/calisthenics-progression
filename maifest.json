@@ -1,11 +1,14 @@
 {
-  "name": "Calisthenics Progression",
-  "short_name": "Calisthenics",
-  "start_url": "./",
-  "scope": "./",
+  "id": "/calisthenics-progression/",
+  "name": "Calisthenics Pro",
+  "short_name": "Calisthenics Pro",
+  "description": "Track your calisthenics skills, workouts, achievements, and progress.",
+  "start_url": "/calisthenics-progression/",
+  "scope": "/calisthenics-progression/",
   "display": "standalone",
-  "background_color": "#101713",
-  "theme_color": "#101713",
+  "orientation": "portrait",
+  "background_color": "#10251b",
+  "theme_color": "#10251b",
   "icons": [
     {
       "src": "icon-192.png",
