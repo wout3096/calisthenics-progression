@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#10251b">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#10251b">
 <title>Calisthenics Pro</title>
-<meta name="theme-color" content="#101713">
 
 <style>
 :root {
@@ -220,15 +219,37 @@ input,textarea {
   margin-top:2px;
 }
 
+.exercise-content {
+  flex:1;
+  min-width:0;
+}
+
 .exercise label {
+  display:block;
   cursor:pointer;
   font-size:14px;
   line-height:1.5;
+  margin-bottom:8px;
 }
 
-.exercise input:checked + label {
+.exercise input:checked + .exercise-content label {
   text-decoration:line-through;
   color:var(--muted);
+}
+
+.video-link {
+  display:inline-block;
+  color:var(--green);
+  font-size:12px;
+  text-decoration:none;
+  border:1px solid var(--border);
+  padding:7px 10px;
+  border-radius:6px;
+}
+
+.video-link:hover {
+  background:var(--panel);
+  border-color:var(--green);
 }
 
 .primary {
@@ -690,6 +711,13 @@ function renderLevels() {
           ${level.map((exercise,j)=>{
             const id=start+j;
 
+            const searchQuery=encodeURIComponent(
+              exercise+" calisthenics exercise tutorial proper technique"
+            );
+
+            const videoURL=
+              "https://www.youtube.com/results?search_query="+searchQuery;
+
             return `
               <div class="exercise">
                 <input type="checkbox"
@@ -697,9 +725,19 @@ function renderLevels() {
                   id="check-${id}"
                   ${saved.includes(id)?"checked":""}>
 
-                <label for="check-${id}">
-                  ${escapeHTML(exercise)}
-                </label>
+                <div class="exercise-content">
+                  <label for="check-${id}">
+                    ${escapeHTML(exercise)}
+                  </label>
+
+                  <a
+                    class="video-link"
+                    href="${videoURL}"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    ▶ Watch tutorial
+                  </a>
+                </div>
               </div>
             `;
           }).join("")}
