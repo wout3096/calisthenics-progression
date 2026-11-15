@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calisthenics Progression Tracker</title>
+
+<style>
+:root {
+  --bg: #101713;
+  --panel: #19231d;
+  --panel2: #202d25;
+  --text: #f0f5ed;
+  --muted: #a2b1a5;
+  --green: #a8e6a1;
+  --green-dark: #4e9b5b;
+  --border: #34453a;
+  --red: #f28b82;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+  padding: 28px 20px;
+  border-bottom: 1px solid var(--border);
+  background: #141e18;
+}
+
+.header-inner {
+  max-width: 1100px;
+  margin: auto;
+}
+
+.logo {
+  color: var(--green);
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+header h1 {
+  margin: 10px 0 5px;
+  font-size: clamp(26px, 5vw, 42px);
+}
+
+header p {
+  margin: 0;
+  color: var(--muted);
+}
+
+nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  max-width: 1100px;
+  margin: 20px auto 0;
+}
+
+nav button {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 11px 17px;
+  border-radius: 9px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+nav button.active,
+nav button:hover {
+  color: #102014;
+  background: var(--green);
+  border-color: var(--green);
+}
+
+main {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 0 20px 50px;
+}
+
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: block;
+}
+
+.section-heading {
+  margin-bottom: 22px;
+}
+
+.section-heading h2 {
+  margin-bottom: 7px;
+  font-size: 25px;
+}
+
+.section-heading p {
+  color: var(--muted);
+  margin-top: 0;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 13px;
+  margin-bottom: 25px;
+}
+
+.stat {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 19px;
+  border-radius: 13px;
+}
+
+.stat-label {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.stat-number {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--green);
+  margin-top: 7px;
+}
+
+.search {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 15px;
+}
+
+.search:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--green-dark);
+}
+
+.skill-list {
+  display: grid;
+  gap: 12px;
+}
+
+.skill-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  overflow: hidden;
+}
+
+.skill-card[open] {
+  border-color: var(--green-dark);
+}
+
+.skill-summary {
+  padding: 19px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.skill-summary::-webkit-details-marker {
+  display: none;
+}
+
+.skill-summary:hover {
+  background: var(--panel2);
+}
+
+.skill-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.skill-description {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.skill-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.skill-count {
+  color: var(--green);
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.arrow {
+  color: var(--green);
+  font-size: 22px;
+  transition: transform .2s;
+}
+
+.skill-card[open] .arrow {
+  transform: rotate(180deg);
+}
+
+.skill-content {
+  padding: 0 19px 20px;
+  border-top: 1px solid var(--border);
+}
+
+.progress-label {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 17px 0 8px;
+}
+
+.progress-track {
+  height: 8px;
+  background: #303e34;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0;
+  background: var(--green);
+  border-radius: 20px;
+  transition: width .2s;
+}
+
+.stage {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px;
+  margin: 8px 0;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.stage:hover {
+  border-color: var(--green-dark);
+}
+
+.stage input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--green-dark);
+  flex-shrink: 0;
+}
+
+.stage-number {
+  display: block;
+  color: var(--green);
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.stage-text {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.tip {
+  margin-top: 17px;
+  padding: 13px;
+  color: var(--muted);
+  background: #17251b;
+  border-left: 3px solid var(--green-dark);
+  border-radius: 5px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+
+.panel h3 {
+  margin-top: 0;
+}
+
+label.form-label {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  margin: 15px 0 7px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  padding: 12px;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 75px;
+}
+
+.primary-button {
+  margin-top: 17px;
+  padding: 12px 18px;
+  color: #102014;
+  background: var(--green);
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.primary-button:hover {
+  background: #c3f3bd;
+}
+
+.log-entry {
+  padding: 15px;
+  margin: 10px 0;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+}
+
+.log-entry strong {
+  color: var(--green);
+}
+
+.log-entry p {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 0;
+}
+
+.delete-button {
+  float: right;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--red);
+  border-radius: 6px;
+  padding: 5px 9px;
+  cursor: pointer;
+}
+
+.empty {
+  color: var(--muted);
+  text-align: center;
+  padding: 35px 15px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+}
+
+.bar-row {
+  margin: 17px 0;
+}
+
+.bar-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+  margin-bottom: 7px;
+}
+
+.bar-top span:last-child {
+  color: var(--green);
+}
+
+.small-note {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+footer {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  text-align: center;
+  font-size: 12px;
+}
+
+@media (max-width: 550px) {
+  main {
+    padding-left: 13px;
+    padding-right: 13px;
+  }
+
+  .skill-summary {
+    padding: 15px;
+  }
+
+  .skill-content {
+    padding-left: 13px;
+    padding-right: 13px;
+  }
+
+  nav button {
+    flex: 1;
+    padding: 10px 8px;
+  }
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">CALISTHENICS / TRACKER</div>
+    <h1>Build Your Strength.</h1>
+    <p>Track your skills, follow progressions and record your workouts.</p>
+  </div>
+
+  <nav>
+    <button class="active" data-screen="skills">Skills</button>
+    <button data-screen="workouts">Workout Log</button>
+    <button data-screen="progress">Progress</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- SKILLS SCREEN -->
+
+  <section id="skills" class="screen active">
+
+<div class="section-heading">
+  <h2>Skill Library</h2>
+  <p>Choose a skill and open it to see its progression.</p>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-label">Skills started</div>
+    <div class="stat-number" id="startedCount">0</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Stages completed</div>
+    <div class="stat-number" id="stageCount">0</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Workouts logged</div>
+    <div class="stat-number" id="workoutCount">0</div>
+  </div>
+</div>
+
+<input
+  class="search"
+  id="search"
+  type="text"
+  placeholder="Search skills..."
+  aria-label="Search skills"
+>
+
+<div id="skillList" class="skill-list"></div>
+
+  </section>
+
+  <!-- WORKOUT SCREEN -->
+
+  <section id="workouts" class="screen">
+
+<div class="section-heading">
+  <h2>Workout Log</h2>
+  <p>Record your training sessions.</p>
+</div>
+
+<div class="panel">
+  <h3>Add a workout</h3>
+
+  <form id="workoutForm">
+
+    <label class="form-label" for="workoutDate">Date</label>
+    <input id="workoutDate" type="date" required>
+
+    <label class="form-label" for="workoutName">Exercise</label>
+    <input
+      id="workoutName"
+      type="text"
+      placeholder="Example: Pull-ups"
+      required
+    >
+
+    <label class="form-label" for="workoutSets">Sets</label>
+    <input
+      id="workoutSets"
+      type="number"
+      min="1"
+      max="100"
+      placeholder="Example: 3"
+      required
+    >
+
+    <label class="form-label" for="workoutReps">Reps</label>
+    <input
+      id="workoutReps"
+      type="number"
+      min="1"
+      max="1000"
+      placeholder="Example: 8"
+      required
+    >
+
+    <label class="form-label" for="workoutNotes">Notes (optional)</label>
+    <textarea
+      id="workoutNotes"
+      placeholder="How did the exercise feel?"
+    ></textarea>
+
+    <button class="primary-button" type="submit">
+      Save workout
+    </button>
+
+  </form>
+</div>
+
+<div class="panel">
+  <h3>Workout history</h3>
+  <div id="workoutHistory"></div>
+</div>
+
+  </section>
+
+  <!-- PROGRESS SCREEN -->
+
+  <section id="progress" class="screen">
+
+<div class="section-heading">
+  <h2>Your Progress</h2>
+  <p>See how far you've progressed.</p>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-label">Total completed stages</div>
+    <div class="stat-number" id="totalStages">0</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Total workouts</div>
+    <div class="stat-number" id="totalWorkouts">0</div>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>Skill progress</h3>
+  <div id="skillProgress"></div>
+</div>
+
+<div class="panel">
+  <h3>Recent activity</h3>
+  <div id="recentActivity"></div>
+</div>
+
+<div class="panel">
+  <h3>Data settings</h3>
+  <p class="small-note">
+    Your tracker saves information in this browser on this device.
+    Clearing browser data may erase your progress.
+  </p>
+  <button class="primary-button" id="exportButton" type="button">
+    Export my data
+  </button>
+</div>
+
+  </section>
+
+</main>
+
+<footer>
+  CALISTHENICS TRACKER · Stay consistent · Focus on technique
+</footer>
+
+<script>
+"use strict";
+
+/* -----------------------------
+   SKILL DATA
+----------------------------- */
+
+const exercises = [
+
+  {
+    name: "Muscle-up",
+    description: "Develop pulling power and transition strength.",
+    stages: [
+      "Build controlled pull-ups with a comfortable range of motion.",
+      "Practice explosive but controlled pull-ups.",
+      "Build straight-bar dip strength.",
+      "Practice the transition with an appropriately scaled variation.",
+      "Work towards a controlled muscle-up with suitable coaching."
+    ]
+  },
+
+  {
+    name: "Handstand",
+    description: "Develop balance, shoulder control and body awareness.",
+    stages: [
+      "Practice wrist preparation and shoulder mobility.",
+      "Build a stable pike position.",
+      "Practice wall-supported handstand holds with supervision.",
+      "Practice controlled weight shifts while supported.",
+      "Work towards a freestanding balance."
+    ]
+  },
+
+  {
+    name: "Front Lever",
+    description: "Build back, shoulder and core strength.",
+    stages: [
+      "Build a strong hollow-body position.",
+      "Practice tuck front lever holds with suitable support.",
+      "Work on advanced tuck variations when ready.",
+      "Practice one-leg or straddle variations with control.",
+      "Work towards a full front lever."
+    ]
+  },
+
+  {
+    name: "Back Lever",
+    description: "Develop shoulder control and straight-body strength.",
+    stages: [
+      "Build general pulling and core strength.",
+      "Learn the movement with an easy, supported variation.",
+      "Practice tuck variations with appropriate supervision.",
+      "Progress gradually to more extended positions.",
+      "Work towards a full back lever only with good technique."
+    ]
+  },
+
+  {
+    name: "Planche",
+    description: "Develop straight-arm strength and body control.",
+    stages: [
+      "Build wrist and shoulder preparation.",
+      "Practice planche leans with feet on the floor.",
+      "Practice supported tuck variations with coaching.",
+      "Build control in more extended tuck positions.",
+      "Progress gradually towards advanced variations."
+    ]
+  },
+
+  {
+    name: "L-Sit",
+    description: "Build core compression and support strength.",
+    stages: [
+      "Practice seated leg lifts.",
+      "Build support strength on parallel bars or sturdy parallettes.",
+      "Practice one-leg tuck support holds.",
+      "Practice a tucked L-sit.",
+      "Work towards extending both legs."
+    ]
+  },
+
+  {
+    name: "Pull-ups",
+    description: "Build controlled upper-body pulling strength.",
+    stages: [
+      "Practice assisted pull-ups.",
+      "Practice controlled negative pull-ups.",
+      "Build full-range pull-ups with good technique.",
+      "Build consistent sets with comfortable repetitions.",
+      "Work on more challenging variations when ready."
+    ]
+  },
+
+  {
+    name: "Push-ups",
+    description: "Build pushing strength and body control.",
+    stages: [
+      "Practice wall or elevated push-ups.",
+      "Practice incline push-ups.",
+      "Practice controlled floor push-ups.",
+      "Build consistent sets with good technique.",
+      "Explore harder variations when ready."
+    ]
+  },
+
+  {
+    name: "Pistol Squat",
+    description: "Develop single-leg balance and strength.",
+    stages: [
+      "Build comfortable bodyweight squat technique.",
+      "Practice supported single-leg squats.",
+      "Practice box or bench pistol squat variations.",
+      "Gradually increase your range of motion.",
+      "Work towards a controlled pistol squat."
+    ]
+  },
+
+  {
+    name: "Dragon Flag",
+    description: "Build trunk control and full-body tension.",
+    stages: [
+      "Build a comfortable hollow-body hold.",
+      "Practice controlled reverse crunches.",
+      "Practice supported lowering variations.",
+      "Gradually increase the range of motion.",
+      "Work towards a controlled full variation."
+    ]
+  },
+
+  {
+    name: "Human Flag",
+    description: "Develop lateral core and shoulder strength.",
+    stages: [
+      "Build general core and shoulder strength.",
+      "Practice side planks with control.",
+      "Learn safe hand and shoulder positioning with coaching.",
+      "Practice supported progressions with suitable equipment.",
+      "Work towards more advanced variations gradually."
+    ]
+  },
+
+  {
+    name: "V-Sit",
+    description: "Develop core compression and flexibility.",
+    stages: [
+      "Practice seated pike compression lifts.",
+      "Build a controlled L-sit.",
+      "Practice supported leg lifts.",
+      "Gradually improve comfortable compression range.",
+      "Work towards a V-sit variation."
+    ]
+  }
+
+];
+
+
+/* -----------------------------
+   SAVED DATA
+----------------------------- */
+
+function loadData(key, fallback) {
+  try {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
+  } catch (error) {
+    console.error("Could not load saved data:", error);
+    return fallback;
+  }
+}
+
+let completed = loadData("calisthenics_completed", {});
+let workouts = loadData("calisthenics_workouts", []);
+
+function saveData() {
+  try {
+    localStorage.setItem(
+      "calisthenics_completed",
+      JSON.stringify(completed)
+    );
+
+    localStorage.setItem(
+      "calisthenics_workouts",
+      JSON.stringify(workouts)
+    );
+  } catch (error) {
+    alert("Your browser could not save the data. Check your browser storage settings.");
+    console.error(error);
+  }
+}
+
+
+/* -----------------------------
+   HTML ESCAPING
+----------------------------- */
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, character => {
+    const replacements = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    };
+
+    return replacements[character];
+  });
+}
+
+
+/* -----------------------------
+   SKILL LIBRARY
+----------------------------- */
+
+const skillList = document.getElementById("skillList");
+
+function renderSkills() {
+
+  const search = document.getElementById("search").value
+    .trim()
+    .toLowerCase();
+
+  const filtered = exercises.filter(exercise =>
+    exercise.name.toLowerCase().includes(search)
+  );
+
+  if (filtered.length === 0) {
+    skillList.innerHTML = '<p class="empty">No skills found.</p>';
+    return;
+  }
+
+  skillList.innerHTML = filtered.map(exercise => {
+
+    const saved = completed[exercise.name] || [];
+    const amount = saved.length;
+    const total = exercise.stages.length;
+    const percentage = total ? (amount / total) * 100 : 0;
+
+    return `
+      <details class="skill-card">
+
+        <summary class="skill-summary">
+
+          <div class="skill-info">
+            <div class="skill-name">
+              ${escapeHTML(exercise.name)}
+            </div>
+
+            <div class="skill-description">
+              ${escapeHTML(exercise.description)}
+            </div>
+          </div>
+
+          <div class="skill-right">
+            <span class="skill-count">
+              ${amount}/${total}
+            </span>
+            <span class="arrow">⌄</span>
+          </div>
+
+        </summary>
+
+        <div class="skill-content">
+
+          <div class="progress-label">
+            ${amount} of ${total} stages completed
+          </div>
+
+          <div class="progress-track">
+            <div
+              class="progress-fill"
+              style="width:${percentage}%">
+            </div>
+          </div>
+
+          ${exercise.stages.map((stage, index) => `
+
+            <label class="stage">
+
+              <input
+                type="checkbox"
+                data-skill="${escapeHTML(exercise.name)}"
+                data-stage="${index}"
+                ${saved.includes(index) ? "checked" : ""}
+              >
+
+              <span class="stage-text">
+                <span class="stage-number">
+                  STAGE ${index + 1}
+                </span>
+                ${escapeHTML(stage)}
+              </span>
+
+            </label>
+
+          `).join("")}
+
+          <div class="tip">
+            Progress gradually. Prioritise controlled technique,
+            appropriate difficulty and recovery. Stop if you feel pain
+            and ask a qualified coach for help with advanced skills.
+          </div>
+
+        </div>
+
+      </details>
+    `;
+
+  }).join("");
+
+}
+
+
+/* -----------------------------
+   CHECKBOX INTERACTION
+----------------------------- */
+
+skillList.addEventListener("change", event => {
+
+  const checkbox = event.target;
+
+  if (!checkbox.matches('input[type="checkbox"][data-skill]')) {
+    return;
+  }
+
+  const skill = checkbox.dataset.skill;
+  const stage = Number(checkbox.dataset.stage);
+
+  if (!completed[skill]) {
+    completed[skill] = [];
+  }
+
+  if (checkbox.checked) {
+    if (!completed[skill].includes(stage)) {
+      completed[skill].push(stage);
+    }
+  } else {
+    completed[skill] = completed[skill].filter(
+      item => item !== stage
+    );
+  }
+
+  saveData();
+  renderSkills();
+  renderStats();
+  renderProgress();
+
+});
+
+
+/* -----------------------------
+   SEARCH
+----------------------------- */
+
+document.getElementById("search").addEventListener("input", renderSkills);
+
+
+/* -----------------------------
+   NAVIGATION
+----------------------------- */
+
+document.querySelectorAll("nav button").forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    document.querySelectorAll("nav button").forEach(item => {
+      item.classList.remove("active");
+    });
+
+    document.querySelectorAll(".screen").forEach(screen => {
+      screen.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    document.getElementById(
+      button.dataset.screen
+    ).classList.add("active");
+
+    renderStats();
+    renderProgress();
+    renderWorkoutHistory();
+
+  });
+
+});
+
+
+/* -----------------------------
+   STATISTICS
+----------------------------- */
+
+function getCompletedCount() {
+  return Object.values(completed).reduce(
+    (total, stages) => total + stages.length,
+    0
+  );
+}
+
+function getStartedCount() {
+  return Object.values(completed).filter(
+    stages => stages.length > 0
+  ).length;
+}
+
+function renderStats() {
+
+  document.getElementById("startedCount").textContent =
+    getStartedCount();
+
+  document.getElementById("stageCount").textContent =
+    getCompletedCount();
+
+  document.getElementById("workoutCount").textContent =
+    workouts.length;
+
+  document.getElementById("totalStages").textContent =
+    getCompletedCount();
+
+  document.getElementById("totalWorkouts").textContent =
+    workouts.length;
+
+}
+
+
+/* -----------------------------
+   WORKOUT LOG
+----------------------------- */
+
+const workoutDate = document.getElementById("workoutDate");
+
+workoutDate.value = new Date().toLocaleDateString("en-CA");
+
+document.getElementById("workoutForm").addEventListener("submit", event => {
+
+  event.preventDefault();
+
+  const workout = {
+    id: Date.now(),
+    date: workoutDate.value,
+    name: document.getElementById("workoutName").value.trim(),
+    sets: Number(document.getElementById("workoutSets").value),
+    reps: Number(document.getElementById("workoutReps").value),
+    notes: document.getElementById("workoutNotes").value.trim()
+  };
+
+  if (
+    !workout.date ||
+    !workout.name ||
+    workout.sets < 1 ||
+    workout.reps < 1
+  ) {
+    alert("Please fill in all required fields.");
+    return;
+  }
+
+  workouts.unshift(workout);
+
+  saveData();
+
+  event.target.reset();
+  workoutDate.value = new Date().toLocaleDateString("en-CA");
+
+  renderWorkoutHistory();
+  renderStats();
+  renderProgress();
+
+});
+
+function renderWorkoutHistory() {
+
+  const container = document.getElementById("workoutHistory");
+
+  if (workouts.length === 0) {
+    container.innerHTML =
+      '<p class="empty">No workouts recorded yet. Add your first workout above.</p>';
+    return;
+  }
+
+  container.innerHTML = workouts.map(workout => `
+
+    <div class="log-entry">
+
+      <button
+        class="delete-button"
+        data-delete-workout="${workout.id}"
+        type="button">
+        Delete
+      </button>
+
+      <strong>${escapeHTML(workout.name)}</strong>
+
+      <p>
+        ${escapeHTML(workout.date)}
+        · ${workout.sets} sets
+        · ${workout.reps} reps
+      </p>
+
+      ${workout.notes
+        ? `<p>${escapeHTML(workout.notes)}</p>`
+        : ""}
+
+    </div>
+
+  `).join("");
+
+}
+
+document.getElementById("workoutHistory").addEventListener("click", event => {
+
+  const button = event.target.closest("[data-delete-workout]");
+
+  if (!button) return;
+
+  const id = Number(button.dataset.deleteWorkout);
+
+  if (!confirm("Delete this workout entry?")) return;
+
+  workouts = workouts.filter(workout => workout.id !== id);
+
+  saveData();
+  renderWorkoutHistory();
+  renderStats();
+  renderProgress();
+
+});
+
+
+/* -----------------------------
+   PROGRESS DASHBOARD
+----------------------------- */
+
+function renderProgress() {
+
+  const container = document.getElementById("skillProgress");
+
+  container.innerHTML = exercises.map(exercise => {
+
+    const saved = completed[exercise.name] || [];
+    const total = exercise.stages.length;
+    const amount = saved.length;
+    const percentage = total ? (amount / total) * 100 : 0;
+
+    return `
+
+      <div class="bar-row">
+
+        <div class="bar-top">
+          <span>${escapeHTML(exercise.name)}</span>
+          <span>${amount}/${total}</span>
+        </div>
+
+        <div class="progress-track">
+          <div
+            class="progress-fill"
+            style="width:${percentage}%">
+          </div>
+        </div>
+
+      </div>
+
+    `;
+
+  }).join("");
+
+  const recent = document.getElementById("recentActivity");
+
+  if (workouts.length === 0) {
+    recent.innerHTML =
+      '<p class="empty">Your workout history will appear here.</p>';
+  } else {
+
+    recent.innerHTML = workouts.slice(0, 5).map(workout => `
+
+      <div class="log-entry">
+        <strong>${escapeHTML(workout.name)}</strong>
+        <p>
+          ${escapeHTML(workout.date)}
+          · ${workout.sets} sets
+          · ${workout.reps} reps
+        </p>
+      </div>
+
+    `).join("");
+
+  }
+
+}
+
+
+/* -----------------------------
+   EXPORT DATA
+----------------------------- */
+
+document.getElementById("exportButton").addEventListener("click", () => {
+
+  const data = {
+    completed,
+    workouts
+  };
+
+  const file = new Blob(
+    [JSON.stringify(data, null, 2)],
+    { type: "application/json" }
+  );
+
+  const url = URL.createObjectURL(file);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "calisthenics-progress.json";
+  link.click();
+
+  URL.revokeObjectURL(url);
+
+});
+
+
+/* -----------------------------
+   START THE WEBSITE
+----------------------------- */
+
+renderSkills();
+renderStats();
+renderWorkoutHistory();
+renderProgress();
+
+</script>
+
+</body>
+</html>
