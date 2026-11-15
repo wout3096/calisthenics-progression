@@ -1,8 +1,8 @@
 {
   "id": "/calisthenics-progression/",
   "name": "Calisthenics Pro",
-  "short_name": "Calisthenics Pro",
-  "description": "Track your calisthenics skills, workouts, achievements, and progress.",
+  "short_name": "Calisthenics",
+  "description": "Track your calisthenics skills, workouts, and progress.",
   "start_url": "/calisthenics-progression/",
   "scope": "/calisthenics-progression/",
   "display": "standalone",
