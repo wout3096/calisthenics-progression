@@ -854,7 +854,7 @@ function renderSkills() {
     return `
       <details class="skill-card">
 
-        <summary class="skill-summary">
+        <div class="skill-summary" onclick="this.parentElement.open = !this.parentElement.open">
 
           <div class="skill-info">
             <div class="skill-name">
@@ -873,7 +873,7 @@ function renderSkills() {
             <span class="arrow">⌄</span>
           </div>
 
-        </summary>
+        </div>
 
         <div class="skill-content">
 
