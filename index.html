@@ -894,5 +894,26 @@ renderHistory();
 renderProgress();
 
 </script>
+  // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCPSGDjG1Qf2TN0bdIWS5Q_1Cnu69xsm7E",
+  authDomain: "calisthenics-pro-261fa.firebaseapp.com",
+  projectId: "calisthenics-pro-261fa",
+  storageBucket: "calisthenics-pro-261fa.firebasestorage.app",
+  messagingSenderId: "1014577425019",
+  appId: "1:1014577425019:web:1c7bee85b7e02e228850de",
+  measurementId: "G-M79WK1BCBG"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 </body>
 </html>
