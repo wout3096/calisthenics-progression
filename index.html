@@ -3,381 +3,137 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#101010">
 <title>Calisthenics Pro</title>
 
 <style>
 :root {
-  --bg:#101010;
-  --panel:#1b1b1b;
-  --panel2:#252525;
-  --green:#ff6b1a;
-  --blue:#ff9b50;
-  --purple:#ffc078;
+  --bg:#0d0e10;
+  --panel:#17191d;
+  --panel2:#202329;
+  --border:#2b2e35;
+  --orange:#ff741f;
+  --orange2:#ff9a50;
   --text:#f5f5f5;
-  --muted:#a5a5a5;
-  --border:#383838;
+  --muted:#9298a3;
+  --green:#64d69a;
+  --red:#ff7474;
+  --radius:15px;
 }
 
-* { box-sizing:border-box; }
+* {box-sizing:border-box}
 
 body {
   margin:0;
   background:var(--bg);
   color:var(--text);
-  font-family:Arial,sans-serif;
+  font-family:Inter,Arial,sans-serif;
+}
+
+button,input,textarea,select {font:inherit}
+button {cursor:pointer}
+
+.app {
+  max-width:1250px;
+  margin:auto;
+  padding:0 22px 50px;
 }
 
 header {
-  padding:25px 18px;
-  background:#171717;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:23px 0;
   border-bottom:1px solid var(--border);
+  gap:15px;
 }
 
-.header-inner, main {
-  max-width:1050px;
-  margin:auto;
+.brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:900;
+  letter-spacing:1.5px;
 }
 
-.logo {
-  color:var(--green);
-  font-weight:bold;
-  letter-spacing:3px;
+.brand-icon {
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  background:var(--orange);
+  color:#111;
+  display:grid;
+  place-items:center;
+  font-size:22px;
+}
+
+.brand span {color:var(--orange)}
+
+.header-tag {
+  color:var(--muted);
   font-size:12px;
 }
-
-h1 { margin:12px 0 5px; }
-
-header p,.muted { color:var(--muted); }
 
 nav {
   display:flex;
-  gap:8px;
-  margin-top:20px;
-  flex-wrap:wrap;
+  gap:7px;
+  padding:15px 0;
+  overflow-x:auto;
+  border-bottom:1px solid var(--border);
 }
 
-button {
-  cursor:pointer;
-  font:inherit;
-}
-
-nav button,.secondary {
+nav button {
+  border:0;
   background:transparent;
   color:var(--muted);
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:11px 16px;
+  padding:11px 15px;
+  border-radius:9px;
+  white-space:nowrap;
+  font-size:13px;
+  font-weight:700;
 }
 
+nav button:hover,
 nav button.active {
-  background:var(--green);
+  background:var(--orange);
   color:#111;
-  border-color:var(--green);
 }
 
-main { padding:25px 18px 50px; }
+.screen {display:none;padding-top:25px}
+.screen.active {display:block}
 
-.screen { display:none; }
-.screen.active { display:block; }
+h1,h2,h3,h4,p {margin-top:0}
 
-h2 { margin-bottom:6px; }
+h1 {font-size:32px;margin-bottom:7px}
+h2 {font-size:24px;margin-bottom:7px}
+h3 {font-size:17px}
 
-.description {
-  color:var(--muted);
-  margin-top:0;
-  margin-bottom:22px;
-}
+.subtitle,.muted {color:var(--muted)}
+.subtitle {font-size:14px;margin-bottom:24px}
+
+.orange {color:var(--orange)}
 
 .grid {
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:13px;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:15px;
 }
 
-.skill-card {
-  text-align:left;
-  width:100%;
+.two-grid {
+  display:grid;
+  grid-template-columns:1.3fr 1fr;
+  gap:17px;
+}
+
+.card {
   background:var(--panel);
-  color:var(--text);
   border:1px solid var(--border);
-  border-radius:12px;
+  border-radius:var(--radius);
   padding:19px;
-}
-
-.skill-card:hover {
-  border-color:var(--green);
-  background:var(--panel2);
-}
-
-.skill-card strong {
-  display:block;
-  font-size:18px;
-  margin-bottom:8px;
-}
-
-.skill-card span {
-  display:block;
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.5;
-}
-
-.skill-card .percent {
-  color:var(--green);
-  margin-top:12px;
-}
-
-.panel {
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:18px;
   margin-bottom:16px;
 }
 
-input,textarea {
-  width:100%;
-  background:var(--bg);
-  color:var(--text);
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:12px;
-  font:inherit;
-}
-
-.search { margin-bottom:18px; }
-
-.progress-track {
-  height:8px;
-  background:#383838;
-  border-radius:20px;
-  overflow:hidden;
-  margin:12px 0;
-}
-
-.progress-fill {
-  height:100%;
-  background:var(--green);
-  border-radius:20px;
-}
-
-.level {
-  border:1px solid var(--border);
-  border-radius:10px;
-  margin:13px 0;
-  overflow:hidden;
-}
-
-.level summary {
-  cursor:pointer;
-  padding:16px;
-  background:var(--panel2);
-  font-weight:bold;
-  list-style:none;
-}
-
-.level summary::-webkit-details-marker { display:none; }
-
-.level summary:after {
-  content:"+";
-  float:right;
-  color:var(--green);
-}
-
-.level[open] summary:after { content:"−"; }
-
-.level-content { padding:12px; }
-
-.level-one summary { border-left:4px solid var(--green); }
-.level-two summary { border-left:4px solid var(--blue); }
-.level-three summary { border-left:4px solid var(--purple); }
-
-.level-label {
-  display:block;
-  font-size:11px;
-  margin-bottom:5px;
-  letter-spacing:1px;
-  color:var(--muted);
-}
-
-.exercise {
-  display:flex;
-  gap:12px;
-  padding:14px;
-  background:var(--panel2);
-  border-radius:8px;
-  margin:9px 0;
-  align-items:flex-start;
-}
-
-.exercise input {
-  width:19px;
-  height:19px;
-  accent-color:var(--green);
-  flex-shrink:0;
-  margin-top:2px;
-}
-
-.exercise-content {
-  flex:1;
-  min-width:0;
-}
-
-.exercise label {
-  display:block;
-  cursor:pointer;
-  font-size:14px;
-  line-height:1.5;
-  margin-bottom:8px;
-}
-
-.exercise input:checked + .exercise-content label {
-  text-decoration:line-through;
-  color:var(--muted);
-}
-
-.video-link {
-  display:inline-block;
-  color:var(--green);
-  font-size:12px;
-  text-decoration:none;
-  border:1px solid var(--border);
-  padding:7px 10px;
-  border-radius:6px;
-}
-
-.video-link:hover {
-  background:var(--panel);
-  border-color:var(--green);
-}
-
-.primary {
-  background:var(--green);
-  color:#111;
-  border:0;
-  padding:12px 17px;
-  border-radius:8px;
-  font-weight:bold;
-  margin-top:10px;
-}
-
-.form-label {
-  display:block;
-  margin:15px 0 7px;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.log-entry {
-  padding:14px;
-  background:var(--panel2);
-  border-radius:8px;
-  margin:10px 0;
-  border:1px solid var(--border);
-}
-
-.log-entry strong { color:var(--green); }
-
-.log-entry p {
-  color:var(--muted);
-  font-size:13px;
-}
-
-.delete {
-  float:right;
-  background:transparent;
-  color:#ff9b91;
-  border:1px solid var(--border);
-  padding:6px 9px;
-  border-radius:6px;
-}
-
-.stats {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
-  gap:12px;
-  margin-bottom:20px;
-}
-
-.stat {
-  background:var(--panel);
-  padding:17px;
-  border:1px solid var(--border);
-  border-radius:10px;
-}
-
-.number {
-  color:var(--green);
-  font-size:27px;
-  font-weight:bold;
-  margin-top:8px;
-}
-
-.empty {
-  color:var(--muted);
-  padding:25px;
-  text-align:center;
-}
-
-/* RANKINGS */
-
-.rank-card {
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:19px;
-  margin-bottom:15px;
-}
-
-.rank-card h3 {
-  margin-top:0;
-  margin-bottom:6px;
-}
-
-.rank-card input {
-  margin-top:12px;
-  max-width:200px;
-}
-
-.rank-badge {
-  display:inline-block;
-  margin-top:12px;
-  padding:9px 15px;
-  border-radius:20px;
-  background:var(--panel2);
-  border:1px solid var(--green);
-  color:var(--green);
-  font-weight:bold;
-}
-
-.rank-next {
-  color:var(--muted);
-  font-size:13px;
-  margin-top:10px;
-}
-
-.rank-guide {
-  padding:15px;
-  background:var(--panel2);
-  border-radius:9px;
-  margin-top:15px;
-  font-size:13px;
-  line-height:1.8;
-}
-
-/* TRAINING CALENDAR */
-
-.calendar {
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:16px;
-  margin-bottom:18px;
-}
-
-.calendar-header {
+.card-title {
   display:flex;
   justify-content:space-between;
   align-items:center;
@@ -385,12 +141,231 @@ input,textarea {
   margin-bottom:15px;
 }
 
-.calendar-header button {
+.card-title h3 {margin:0}
+
+.stat-card {
+  background:linear-gradient(145deg,#202329,#15171b);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:19px;
+}
+
+.stat-label {
+  color:var(--muted);
+  font-size:12px;
+}
+
+.stat-number {
+  font-size:30px;
+  font-weight:900;
+  margin:9px 0 4px;
+}
+
+.stat-note {
+  font-size:11px;
+  color:var(--orange2);
+}
+
+.btn {
+  border:0;
+  border-radius:9px;
+  padding:11px 16px;
+  font-weight:800;
+  background:var(--orange);
+  color:#111;
+}
+
+.btn:hover {background:var(--orange2)}
+
+.btn-secondary {
   background:var(--panel2);
   color:var(--text);
   border:1px solid var(--border);
-  padding:9px 13px;
-  border-radius:7px;
+}
+
+.btn-small {padding:8px 11px;font-size:12px}
+
+input,textarea,select {
+  background:#101216;
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:12px;
+  width:100%;
+  outline:none;
+}
+
+input:focus,textarea:focus,select:focus {
+  border-color:var(--orange);
+}
+
+label.form-label {
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin:13px 0 7px;
+}
+
+.progress-track {
+  width:100%;
+  height:8px;
+  background:#30343b;
+  border-radius:20px;
+  overflow:hidden;
+  margin:12px 0;
+}
+
+.progress-fill {
+  height:100%;
+  background:linear-gradient(90deg,var(--orange),var(--orange2));
+  border-radius:20px;
+}
+
+.skill-card {
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:18px;
+  color:var(--text);
+  text-align:left;
+  transition:.2s;
+  width:100%;
+}
+
+.skill-card:hover {
+  border-color:var(--orange);
+  transform:translateY(-2px);
+}
+
+.skill-icon {
+  font-size:25px;
+  margin-bottom:12px;
+}
+
+.skill-card strong {
+  display:block;
+  font-size:16px;
+  margin-bottom:7px;
+}
+
+.skill-card small {
+  color:var(--muted);
+  line-height:1.5;
+}
+
+.skill-percent {
+  color:var(--orange);
+  font-size:12px;
+  margin-top:13px;
+}
+
+.level {
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin:12px 0;
+  overflow:hidden;
+}
+
+.level summary {
+  padding:17px;
+  cursor:pointer;
+  background:var(--panel2);
+  font-weight:800;
+  list-style:none;
+}
+
+.level summary::-webkit-details-marker {display:none}
+.level summary:after {content:"+";float:right;color:var(--orange)}
+.level[open] summary:after {content:"−"}
+
+.level-content {padding:12px}
+
+.exercise {
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:13px;
+  background:var(--panel2);
+  border-radius:9px;
+  margin:8px 0;
+}
+
+.exercise input {
+  width:18px;
+  height:18px;
+  accent-color:var(--orange);
+  margin-top:2px;
+}
+
+.exercise label {
+  cursor:pointer;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.exercise input:checked + label {
+  text-decoration:line-through;
+  color:var(--muted);
+}
+
+.badge {
+  display:inline-block;
+  padding:7px 11px;
+  background:#33251d;
+  border:1px solid #65402a;
+  border-radius:20px;
+  color:var(--orange2);
+  font-size:11px;
+  font-weight:800;
+}
+
+.achievement {
+  background:var(--panel2);
+  border:1px solid var(--border);
+  padding:15px;
+  border-radius:11px;
+}
+
+.achievement.unlocked {border-color:var(--orange)}
+.achievement.locked {opacity:.48}
+
+.achievement-icon {font-size:25px;margin-bottom:8px}
+.achievement strong {display:block;font-size:13px}
+.achievement small {color:var(--muted)}
+
+.rank-card {
+  padding:18px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:14px;
+}
+
+.rank-badge {
+  display:inline-block;
+  background:#30251e;
+  color:var(--orange2);
+  border:1px solid #68452f;
+  border-radius:30px;
+  padding:8px 13px;
+  font-weight:800;
+  margin-top:12px;
+}
+
+.calendar {
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:17px;
+}
+
+.calendar-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+  gap:10px;
 }
 
 .calendar-grid {
@@ -399,60 +374,40 @@ input,textarea {
   gap:5px;
 }
 
+.day-name {
+  color:var(--muted);
+  text-align:center;
+  font-size:11px;
+  padding:8px 0;
+}
+
 .calendar-day {
-  min-height:48px;
-  border:1px solid var(--border);
-  border-radius:7px;
+  min-width:0;
+  min-height:47px;
   background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:8px;
   color:var(--text);
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   gap:3px;
-  font-size:13px;
-  min-width:0;
+  font-size:12px;
 }
 
-.calendar-day.empty-day {
-  background:transparent;
-  border-color:transparent;
-}
+.calendar-day.empty {background:transparent;border:0}
+.calendar-day.planned {background:#34251b}
+.calendar-day.completed {border-color:var(--green)}
+.calendar-day.selected {outline:2px solid var(--orange)}
+.calendar-day.today {color:var(--orange2);font-weight:900}
 
-.calendar-day.selected {
-  border:2px solid var(--green);
-}
-
-.calendar-day.today {
-  color:var(--green);
-  font-weight:bold;
-}
-
-.calendar-day.planned {
-  background:#33251c;
-}
-
-.calendar-day.completed {
-  border-color:var(--green);
-}
-
-.calendar-dot {
-  font-size:10px;
-  color:var(--green);
-}
-
-.day-name {
-  text-align:center;
-  color:var(--muted);
-  font-size:11px;
-  padding:7px 0;
-}
+.calendar-dot {font-size:9px;color:var(--green)}
 
 .planner-days {
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(85px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(95px,1fr));
   gap:8px;
-  margin-top:12px;
 }
 
 .planner-day {
@@ -462,370 +417,491 @@ input,textarea {
   background:var(--panel2);
   padding:11px;
   border-radius:8px;
-  font-size:13px;
+  font-size:12px;
 }
 
 .planner-day input {
-  width:17px;
-  height:17px;
-  accent-color:var(--green);
+  width:16px;
+  height:16px;
+  accent-color:var(--orange);
 }
 
-.calendar-legend {
+.log-entry {
+  background:var(--panel2);
+  border:1px solid var(--border);
+  padding:14px;
+  border-radius:9px;
+  margin:10px 0;
+}
+
+.log-entry strong {color:var(--orange2)}
+.log-entry p {font-size:12px;color:var(--muted);margin:7px 0 0}
+
+.timer {
+  text-align:center;
+  padding:25px 10px;
+}
+
+.timer-number {
+  font-size:54px;
+  font-weight:900;
+  margin:12px;
+}
+
+.timer-buttons {
   display:flex;
-  gap:15px;
+  justify-content:center;
+  gap:8px;
   flex-wrap:wrap;
-  color:var(--muted);
+}
+
+.bar-row {
+  display:grid;
+  grid-template-columns:90px 1fr 35px;
+  align-items:center;
+  gap:10px;
+  margin:12px 0;
   font-size:12px;
-  margin-top:14px;
+}
+
+.bar {
+  height:9px;
+  background:#30343b;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.bar div {
+  height:100%;
+  background:var(--orange);
+}
+
+.empty {
+  color:var(--muted);
+  text-align:center;
+  padding:20px;
 }
 
 footer {
-  text-align:center;
   color:var(--muted);
-  padding:20px;
-  border-top:1px solid var(--border);
-  font-size:12px;
+  text-align:center;
+  padding:30px 10px;
+  font-size:11px;
 }
 
-@media(max-width:500px) {
-  nav button {
-    flex:1;
-    padding:10px 7px;
-  }
+@media(max-width:750px) {
+  .two-grid {grid-template-columns:1fr}
+  .header-tag {display:none}
+  .app {padding:0 13px 35px}
+  h1 {font-size:27px}
+  nav button {padding:10px 12px}
+}
 
-  .calendar-day {
-    min-height:42px;
-    font-size:12px;
-  }
+@media(max-width:400px) {
+  .calendar-day {min-height:39px}
+  .calendar-grid {gap:3px}
 }
 </style>
 </head>
 
 <body>
 
-<header>
-<div class="header-inner">
-<div class="logo">CALISTHENICS / PRO</div>
-<h1>Build Your Strength.</h1>
-<p>Start from zero. Build your skills. Track your progress.</p>
+<div class="app">
 
-<nav>
-<button class="active" data-screen="skills">Skills</button>
-<button data-screen="rankings">🏆 Rankings</button>
-<button data-screen="workouts">Workout Log</button>
-<button data-screen="progress">Progress</button>
-</nav>
-</div>
+<header>
+  <div class="brand">
+    <div class="brand-icon">C</div>
+    <div>CALISTHENICS <span>PRO</span></div>
+  </div>
+  <div class="header-tag">YOUR PERSONAL TRAINING SYSTEM</div>
 </header>
 
-<main>
+<nav>
+  <button class="active" data-screen="dashboard">⌂ Home</button>
+  <button data-screen="skills">◈ Skills</button>
+  <button data-screen="workouts">▣ Workouts</button>
+  <button data-screen="rankings">♛ Rankings</button>
+  <button data-screen="achievements">★ Achievements</button>
+  <button data-screen="progress">↗ Progress</button>
+</nav>
+
+<!-- DASHBOARD -->
+
+<section class="screen active" id="dashboard">
+
+  <h1>Welcome back.</h1>
+  <p class="subtitle">Every rep is a step forward. Keep building.</p>
+
+  <div class="grid" id="dashboardStats"></div>
+
+  <div class="two-grid" style="margin-top:18px">
+
+    <div class="card">
+      <div class="card-title">
+        <h3>Weekly activity</h3>
+        <span class="badge">THIS WEEK</span>
+      </div>
+      <div id="weeklyActivity"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <h3>Your level</h3>
+        <span class="orange" id="levelName">Level 1</span>
+      </div>
+      <div class="stat-number" id="xpNumber">0 XP</div>
+      <p class="muted" id="xpNext">Start logging workouts to earn XP.</p>
+      <div class="progress-track">
+        <div class="progress-fill" id="xpBar"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="two-grid">
+
+    <div class="card">
+      <div class="card-title">
+        <h3>Next training day</h3>
+        <span class="orange">📅</span>
+      </div>
+      <div id="nextTraining"></div>
+      <button class="btn btn-small" onclick="showScreen('workouts')">
+        Open planner
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <h3>Recent achievements</h3>
+        <span class="orange">★</span>
+      </div>
+      <div id="recentAchievements"></div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <h3>Continue your journey</h3>
+      <button class="btn btn-small" onclick="showScreen('skills')">View skills</button>
+    </div>
+    <div class="grid" id="featuredSkills"></div>
+  </div>
+
+</section>
 
 <!-- SKILLS -->
 
-<section id="skills" class="screen active">
-<h2>Skill Library</h2>
-<p class="description">Choose a skill and work through its three levels.</p>
-<input class="search" id="search" placeholder="Search skills...">
-<div class="grid" id="skillGrid"></div>
+<section class="screen" id="skills">
+
+  <h1>Skill library</h1>
+  <p class="subtitle">Build your abilities one progression at a time.</p>
+
+  <input id="skillSearch" placeholder="Search for a skill...">
+
+  <div class="grid" id="skillGrid" style="margin-top:17px"></div>
+
 </section>
 
 <!-- SKILL DETAILS -->
 
-<section id="detail" class="screen">
-<button class="secondary" id="back">← Back to skills</button>
+<section class="screen" id="detail">
 
-<div class="panel" style="margin-top:18px">
-<h2 id="skillTitle"></h2>
-<p class="muted" id="skillDescription"></p>
-<p id="skillStats" class="muted"></p>
+  <button class="btn btn-secondary btn-small" onclick="showScreen('skills')">
+    ← Back to skills
+  </button>
 
-<div class="progress-track">
-<div class="progress-fill" id="skillBar"></div>
-</div>
+  <div class="card" style="margin-top:17px">
+    <h1 id="detailTitle"></h1>
+    <p class="muted" id="detailDescription"></p>
+    <div id="detailStats" class="orange"></div>
+    <div class="progress-track">
+      <div class="progress-fill" id="detailBar"></div>
+    </div>
+    <div id="detailLevels"></div>
+  </div>
 
-<div id="levels"></div>
-</div>
+</section>
+
+<!-- WORKOUTS -->
+
+<section class="screen" id="workouts">
+
+  <h1>Training centre</h1>
+  <p class="subtitle">Plan your week, log your sessions and track your work.</p>
+
+  <div class="card">
+    <div class="card-title">
+      <h3>Weekly training schedule</h3>
+      <span class="badge">PLANNER</span>
+    </div>
+    <p class="muted" style="font-size:12px">Choose the days you plan to train. Remember to schedule recovery days.</p>
+    <div class="planner-days" id="plannerDays"></div>
+  </div>
+
+  <div class="calendar">
+    <div class="calendar-header">
+      <button class="btn btn-secondary btn-small" id="prevMonth">←</button>
+      <strong id="calendarTitle"></strong>
+      <button class="btn btn-secondary btn-small" id="nextMonth">→</button>
+    </div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+    <p class="muted" style="font-size:11px;margin-top:13px">
+      🟠 Planned day &nbsp; 🟢 Completed workout &nbsp; Orange outline = selected
+    </p>
+  </div>
+
+  <div class="two-grid" style="margin-top:17px">
+
+    <div class="card">
+      <h3 id="selectedDateTitle">Selected day</h3>
+      <div id="selectedWorkouts"></div>
+    </div>
+
+    <div class="card">
+      <h3>Rest timer</h3>
+      <div class="timer">
+        <div class="timer-number" id="timerDisplay">01:30</div>
+        <div class="timer-buttons">
+          <button class="btn btn-small" onclick="startTimer()">Start</button>
+          <button class="btn btn-secondary btn-small" onclick="pauseTimer()">Pause</button>
+          <button class="btn btn-secondary btn-small" onclick="resetTimer()">Reset</button>
+        </div>
+        <p class="muted" style="font-size:11px;margin-top:15px">A rest timer is a guide. Take extra recovery when you need it.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <h3>Log a workout</h3>
+
+    <form id="workoutForm">
+
+      <label class="form-label">Date</label>
+      <input type="date" id="workoutDate" required>
+
+      <label class="form-label">Exercise</label>
+      <input id="workoutExercise" placeholder="Example: Pull-ups" required>
+
+      <div class="two-grid" style="gap:10px">
+        <div>
+          <label class="form-label">Sets</label>
+          <input type="number" id="workoutSets" min="1" max="100" required>
+        </div>
+        <div>
+          <label class="form-label">Reps per set</label>
+          <input type="number" id="workoutReps" min="1" max="1000" required>
+        </div>
+      </div>
+
+      <label class="form-label">Notes</label>
+      <textarea id="workoutNotes" rows="3" placeholder="How did the session feel?"></textarea>
+
+      <button class="btn" type="submit" style="margin-top:15px">Save workout</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3>Workout history</h3>
+    <div id="workoutHistory"></div>
+  </div>
+
 </section>
 
 <!-- RANKINGS -->
 
-<section id="rankings" class="screen">
+<section class="screen" id="rankings">
 
-<h2>🏆 Strength Rankings</h2>
-<p class="description">
-Enter your best clean repetitions to discover your rank.
-</p>
+  <h1>Strength rankings</h1>
+  <p class="subtitle">Track your personal milestones and celebrate progress.</p>
 
-<div id="rankingCards"></div>
+  <div id="rankingCards"></div>
 
-<div class="panel">
-<h3>Ranking Guide</h3>
-
-<div class="rank-guide">
-🟤 <strong>Beginner</strong> — Starting your journey<br>
-🥉 <strong>Bronze</strong> — Building consistency<br>
-🥈 <strong>Silver</strong> — Developing strength<br>
-🥇 <strong>Gold</strong> — Strong performance<br>
-💎 <strong>Diamond</strong> — Advanced performance<br>
-👑 <strong>Elite</strong> — Exceptional performance
-</div>
-
-<p class="muted" style="font-size:12px;margin-top:15px">
-Ranks are personal milestones, not comparisons with other athletes.
-Only count controlled repetitions using consistent technique.
-For handstand push-ups, use an appropriate supervised progression.
-</p>
-</div>
+  <div class="card">
+    <h3>Ranking levels</h3>
+    <p class="muted" style="line-height:2">
+      🟤 Beginner<br>
+      🥉 Bronze<br>
+      🥈 Silver<br>
+      🥇 Gold<br>
+      💎 Diamond<br>
+      👑 Elite
+    </p>
+    <p class="muted" style="font-size:11px">
+      These are app milestones, not medical or competition standards.
+      Count only controlled repetitions using consistent technique.
+    </p>
+  </div>
 
 </section>
 
-<!-- WORKOUT PLANNER -->
+<!-- ACHIEVEMENTS -->
 
-<section id="workouts" class="screen">
+<section class="screen" id="achievements">
 
-<h2>Training Planner</h2>
-<p class="description">
-Plan your training week, track completed workouts and view your history.
-</p>
+  <h1>Achievements</h1>
+  <p class="subtitle">Celebrate milestones along your calisthenics journey.</p>
 
-<div class="panel">
-<h3>📅 Your Training Days</h3>
-<p class="muted">Choose the days you plan to train each week.</p>
-
-<div class="planner-days" id="plannerDays"></div>
-
-<p class="muted" style="font-size:12px">
-Your schedule is saved automatically. Rest days are important too!
-</p>
-</div>
-
-<div class="calendar">
-<div class="calendar-header">
-<button type="button" id="previousMonth">←</button>
-<strong id="calendarMonth"></strong>
-<button type="button" id="nextMonth">→</button>
-</div>
-
-<div class="calendar-grid" id="calendarDays"></div>
-
-<div class="calendar-legend">
-<span>🟠 Planned day</span>
-<span>🟢 Completed workout</span>
-<span>🟡 Selected date</span>
-</div>
-</div>
-
-<div class="panel">
-<h3 id="selectedDateTitle">Selected day</h3>
-<div id="selectedDayWorkouts"></div>
-</div>
-
-<div class="panel">
-<h3>➕ Add Workout</h3>
-
-<form id="workoutForm">
-
-<label class="form-label">Date</label>
-<input type="date" id="date" required>
-
-<label class="form-label">Exercise</label>
-<input id="exercise" placeholder="Example: Pull-ups" required>
-
-<label class="form-label">Sets</label>
-<input type="number" id="sets" min="1" step="1" required>
-
-<label class="form-label">Reps</label>
-<input type="number" id="reps" min="1" step="1" required>
-
-<label class="form-label">Notes</label>
-<textarea id="notes" rows="3" placeholder="How did your workout go?"></textarea>
-
-<button class="primary" type="submit">Save workout</button>
-
-</form>
-</div>
-
-<div class="panel">
-<h3>All Workout History</h3>
-<div id="history"></div>
-</div>
+  <div class="grid" id="achievementGrid"></div>
 
 </section>
 
 <!-- PROGRESS -->
 
-<section id="progress" class="screen">
+<section class="screen" id="progress">
 
-<h2>Your Progress</h2>
-<p class="description">See how far you have progressed.</p>
+  <h1>Your progress</h1>
+  <p class="subtitle">Your training history and personal statistics.</p>
 
-<div class="stats">
+  <div class="grid" id="progressStats"></div>
 
-<div class="stat">
-<div class="muted">Skills started</div>
-<div class="number" id="started">0</div>
-</div>
+  <div class="card">
+    <h3>Skill progress</h3>
+    <div id="skillProgressList"></div>
+  </div>
 
-<div class="stat">
-<div class="muted">Exercises completed</div>
-<div class="number" id="done">0</div>
-</div>
-
-<div class="stat">
-<div class="muted">Workouts</div>
-<div class="number" id="workoutTotal">0</div>
-</div>
-
-</div>
-
-<div class="panel">
-<h3>All Skill Progress</h3>
-<div id="allProgress"></div>
-</div>
+  <div class="card">
+    <h3>Workout history</h3>
+    <div id="progressHistory"></div>
+  </div>
 
 </section>
 
-</main>
+<footer>
+  CALISTHENICS PRO · BUILT FOR PROGRESS
+</footer>
 
-<footer>CALISTHENICS PRO · CONSISTENCY OVER PERFECTION</footer>
+</div>
 
 <script>
 "use strict";
 
-/* SKILL LIBRARY */
+/* --------------------------------
+   SKILL DATA
+-------------------------------- */
 
 const skills = [
 {
-name:"Pull-up",
-description:"Build pulling strength from your very first hang.",
+name:"Pull-up",icon:"💪",
+description:"Develop pulling strength and control.",
 levels:[
-["Dead hangs.","Active hangs.","Scapular pull-ups.","Shoulder circles."],
-["Australian rows.","Assisted pull-ups.","Foot-assisted pull-ups.","Negative pull-ups."],
-["Full pull-ups.","Controlled pull-ups.","Chest-to-bar preparation.","Comfortable grip variations."]
+["Dead hangs","Active hangs","Scapular pull-ups"],
+["Australian rows","Assisted pull-ups","Negative pull-ups"],
+["Full pull-ups","Controlled pull-ups","Chest-to-bar preparation"]
 ]
 },
 {
-name:"Push-up",
-description:"Develop pushing strength and body control.",
+name:"Push-up",icon:"🔥",
+description:"Build upper-body pushing strength.",
 levels:[
-["Wall push-ups.","High incline push-ups.","Wall shoulder taps.","Elevated plank holds."],
-["Lower incline push-ups.","Knee push-ups.","Negative push-ups.","Full push-up practice."],
-["Full push-ups.","Close-grip preparation.","Decline push-up preparation.","Controlled repetitions."]
+["Wall push-ups","Incline push-ups","Elevated plank"],
+["Knee push-ups","Negative push-ups","Full push-up practice"],
+["Full push-ups","Close-grip preparation","Decline push-up preparation"]
 ]
 },
 {
-name:"Muscle-up",
-description:"Build pulling and pushing strength.",
+name:"Muscle-up",icon:"⚡",
+description:"Develop pulling and pushing strength.",
 levels:[
-["Dead hangs.","Active hangs.","Scapular pull-ups.","Australian rows.","Wall push-ups."],
-["Assisted pull-ups.","Negative pull-ups.","Straight-bar support holds.","Assisted straight-bar dips."],
-["Strong full pull-ups.","High pull-up preparation.","Straight-bar dips.","Transition practice with qualified coaching."]
+["Dead hangs","Active hangs","Australian rows"],
+["Assisted pull-ups","Negative pull-ups","Straight-bar support holds"],
+["Strong pull-ups","High pull-up preparation","Straight-bar dips"]
 ]
 },
 {
-name:"Handstand",
-description:"Develop balance, wrist comfort and shoulder strength.",
+name:"Handstand",icon:"🤸",
+description:"Develop balance and shoulder control.",
 levels:[
-["Wrist circles.","Wrist mobility.","Wall plank holds.","Downward dog holds.","Bear holds."],
-["Pike holds.","Elevated pike holds.","Supervised wall walks.","Wall-supported preparation."],
-["Wall-supported handstand holds.","Handstand weight shifts.","Controlled wall practice.","Balance preparation with qualified coaching."]
+["Wrist mobility","Wall plank holds","Bear holds"],
+["Pike holds","Elevated pike holds","Supervised wall walks"],
+["Wall-supported holds","Weight shifts","Balance preparation"]
 ]
 },
 {
-name:"Front Lever",
+name:"Front Lever",icon:"🚀",
 description:"Build back and core strength.",
 levels:[
-["Dead hangs.","Active hangs.","Scapular pull-ups.","Dead bugs.","Hollow-body holds."],
-["Australian rows.","Inverted rows.","Tuck hollow holds.","Glute bridges.","Assisted tuck preparation."],
-["Tuck front lever preparation.","Advanced tuck preparation.","Lever progression with coaching.","Controlled holds."]
+["Dead hangs","Active hangs","Hollow holds"],
+["Australian rows","Inverted rows","Tuck preparation"],
+["Tuck preparation","Advanced tuck preparation","Controlled progressions"]
 ]
 },
 {
-name:"Back Lever",
-description:"Prepare your shoulders, back and core.",
+name:"Back Lever",icon:"🔱",
+description:"Develop shoulder and core control.",
 levels:[
-["Dead hangs.","Active hangs.","Scapular pull-ups.","Hollow-body holds.","Glute bridges."],
-["Reverse plank holds.","Australian rows.","Shoulder mobility.","Core stability."],
-["Back lever preparation with coaching.","Assisted tuck practice.","Controlled progression."]
+["Dead hangs","Active hangs","Glute bridges"],
+["Reverse plank","Australian rows","Shoulder mobility"],
+["Assisted preparation","Tuck practice","Controlled progression"]
 ]
 },
 {
-name:"Planche",
-description:"Build wrist and shoulder strength through gradual planche progressions.",
+name:"Planche",icon:"🔥",
+description:"Build wrist and shoulder strength gradually.",
 levels:[
-[
-"Wrist circles and wrist mobility.",
-"Planche lean preparation.",
-"Frog stand."
-],
-[
-"Tuck planche preparation.",
-"Tuck planche hold.",
-"Advanced tuck planche preparation."
-],
-[
-"Advanced tuck planche hold.",
-"Straddle planche preparation.",
-"Straddle planche hold.",
-"Full planche (advanced long-term goal; qualified coaching recommended)."
-]
+["Wrist mobility","Planche lean preparation","Frog stand"],
+["Tuck planche preparation","Tuck planche hold","Advanced tuck preparation"],
+["Advanced tuck preparation","Straddle preparation","Full planche as a long-term advanced goal"]
 ]
 },
 {
-name:"L-Sit",
-description:"Build core strength and support control.",
+name:"L-Sit",icon:"📐",
+description:"Develop core compression and support strength.",
 levels:[
-["Dead bugs.","Seated knee raises.","Seated leg lifts.","Glute bridges."],
-["Support holds on stable parallettes.","Tuck support holds.","Alternating knee lifts.","Reverse crunches."],
-["Tuck L-sit holds.","One-leg preparation.","L-sit holds.","Controlled practice."]
+["Dead bugs","Seated knee raises","Seated leg lifts"],
+["Support holds","Tuck support holds","Alternating knee lifts"],
+["Tuck L-sit","One-leg preparation","L-sit practice"]
 ]
 },
 {
-name:"Pistol Squat",
+name:"Pistol Squat",icon:"🦵",
 description:"Build single-leg balance and strength.",
 levels:[
-["Bodyweight squats.","Single-leg balance.","Supported split squats.","Glute bridges."],
-["Reverse lunges.","Box squats.","Supported single-leg squats.","Low step-ups."],
-["Assisted pistol squats.","Controlled negatives.","Pistol squat practice."]
+["Bodyweight squats","Single-leg balance","Supported split squats"],
+["Reverse lunges","Box squats","Low step-ups"],
+["Assisted pistol squats","Controlled negatives","Pistol squat practice"]
 ]
 },
 {
-name:"Dragon Flag",
-description:"Build core strength and body control.",
+name:"Dragon Flag",icon:"🐉",
+description:"Develop core strength and control.",
 levels:[
-["Dead bugs.","Bird dogs.","Glute bridges.","Plank holds."],
-["Reverse crunches.","Hollow-body holds.","Side plank holds.","Controlled leg raises."],
-["Advanced hollow holds.","Dragon flag preparation with qualified coaching.","Controlled progression."]
+["Dead bugs","Bird dogs","Plank holds"],
+["Reverse crunches","Hollow holds","Side planks"],
+["Advanced hollow holds","Dragon flag preparation","Controlled progression"]
 ]
 },
 {
-name:"Human Flag",
+name:"Human Flag",icon:"🚩",
 description:"Develop lateral core and shoulder strength.",
 levels:[
-["Side plank from knees.","Bird dogs.","Wall push-ups.","Shoulder mobility."],
-["Full side planks.","Supported rows.","Shoulder stability exercises.","Side plank variations."],
-["Human flag preparation with qualified coaching.","Assisted position practice.","Controlled progression."]
+["Side plank","Bird dogs","Shoulder mobility"],
+["Full side planks","Supported rows","Shoulder stability"],
+["Human flag preparation","Assisted practice","Controlled progression"]
 ]
 },
 {
-name:"V-Sit",
+name:"V-Sit",icon:"✨",
 description:"Build core compression and flexibility.",
 levels:[
-["Dead bugs.","Seated knee raises.","Seated leg lifts.","Gentle pike stretches."],
-["Compression lifts.","Tuck support holds.","Reverse crunches.","Seated forward reaches."],
-["Tuck V-sit preparation.","One-leg V-sit preparation.","V-sit practice."]
+["Dead bugs","Seated knee raises","Gentle pike stretches"],
+["Compression lifts","Tuck support holds","Reverse crunches"],
+["Tuck V-sit preparation","One-leg preparation","V-sit practice"]
 ]
 }
 ];
 
-/* STORAGE */
+/* --------------------------------
+   STORAGE
+-------------------------------- */
 
 function load(key,fallback) {
   try {
-    const value=localStorage.getItem(key);
-    return value ? JSON.parse(value) : fallback;
-  } catch(error) {
+    const data=localStorage.getItem(key);
+    return data ? JSON.parse(data) : fallback;
+  } catch(e) {
     return fallback;
   }
 }
@@ -836,188 +912,167 @@ let rankings=load("calisthenics_rankings",{});
 let trainingDays=load("calisthenics_training_days",[]);
 
 function save() {
-  try {
-    localStorage.setItem("calisthenics_completed",JSON.stringify(completed));
-    localStorage.setItem("calisthenics_workouts",JSON.stringify(workouts));
-    localStorage.setItem("calisthenics_rankings",JSON.stringify(rankings));
-    localStorage.setItem("calisthenics_training_days",JSON.stringify(trainingDays));
-  } catch(error) {
-    alert("Your browser could not save the data.");
-  }
+  localStorage.setItem("calisthenics_completed",JSON.stringify(completed));
+  localStorage.setItem("calisthenics_workouts",JSON.stringify(workouts));
+  localStorage.setItem("calisthenics_rankings",JSON.stringify(rankings));
+  localStorage.setItem("calisthenics_training_days",JSON.stringify(trainingDays));
 }
 
 function escapeHTML(value) {
   return String(value).replace(/[&<>"']/g,c=>({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#039;"
+    "&":"&amp;","<":"&lt;",">":"&gt;",
+    '"':"&quot;","'":"&#039;"
   })[c]);
 }
 
 function today() {
   const d=new Date();
-
-  return [
-    d.getFullYear(),
-    String(d.getMonth()+1).padStart(2,"0"),
-    String(d.getDate()).padStart(2,"0")
-  ].join("-");
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 }
 
-/* NAVIGATION */
+function allExercises(skill) {
+  return skill.levels.flat();
+}
+
+function completedCount(skill) {
+  return (completed[skill.name] || []).length;
+}
+
+function totalCompleted() {
+  return Object.values(completed).reduce((sum,arr)=>sum+arr.length,0);
+}
+
+/* --------------------------------
+   XP AND ACHIEVEMENTS
+-------------------------------- */
+
+function getXP() {
+  return workouts.length*50 + totalCompleted()*10;
+}
+
+function getLevel() {
+  return Math.floor(getXP()/250)+1;
+}
+
+const achievements = [
+  {name:"First Steps",icon:"👟",desc:"Complete your first exercise.",check:()=>totalCompleted()>=1},
+  {name:"First Workout",icon:"🔥",desc:"Log your first workout.",check:()=>workouts.length>=1},
+  {name:"Getting Started",icon:"⭐",desc:"Complete 5 exercises.",check:()=>totalCompleted()>=5},
+  {name:"Consistency",icon:"📅",desc:"Log 5 workouts.",check:()=>workouts.length>=5},
+  {name:"Skill Explorer",icon:"🌳",desc:"Start 5 different skills.",check:()=>skills.filter(s=>completedCount(s)>0).length>=5},
+  {name:"Dedicated",icon:"💪",desc:"Complete 20 exercises.",check:()=>totalCompleted()>=20},
+  {name:"Training Regular",icon:"🏅",desc:"Log 10 workouts.",check:()=>workouts.length>=10},
+  {name:"Skill Collector",icon:"🏆",desc:"Complete an entire skill progression.",check:()=>skills.some(s=>completedCount(s)>=allExercises(s).length)}
+];
+
+function unlockedAchievements() {
+  return achievements.filter(a=>a.check());
+}
+
+/* --------------------------------
+   NAVIGATION
+-------------------------------- */
 
 function showScreen(id) {
-  document.querySelectorAll(".screen").forEach(screen=>{
-    screen.classList.remove("active");
-  });
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
 
-  document.getElementById(id).classList.add("active");
+  const target=document.getElementById(id);
+  if(target) target.classList.add("active");
 
-  document.querySelectorAll("nav button").forEach(button=>{
-    button.classList.toggle("active",button.dataset.screen===id);
-  });
+  const navButton=document.querySelector(`[data-screen="${id}"]`);
+  if(navButton) navButton.classList.add("active");
 
+  if(id==="dashboard") renderDashboard();
   if(id==="skills") renderSkills();
   if(id==="rankings") renderRankings();
-
-  if(id==="workouts") {
-    renderPlannerDays();
-    renderCalendar();
-    renderHistory();
-  }
-
+  if(id==="achievements") renderAchievements();
+  if(id==="workouts") renderWorkouts();
   if(id==="progress") renderProgress();
 }
 
 document.querySelectorAll("nav button").forEach(button=>{
-  button.addEventListener("click",()=>{
-    showScreen(button.dataset.screen);
-  });
+  button.addEventListener("click",()=>showScreen(button.dataset.screen));
 });
 
-/* SKILL PROGRESS */
+/* --------------------------------
+   SKILLS
+-------------------------------- */
 
-function flatExercises(skill) {
-  return skill.levels.flat();
-}
-
-function getCompleted(skill) {
-  return completed[skill.name] || [];
-}
+let currentSkill=null;
 
 function renderSkills() {
-  const query=document.getElementById("search").value.toLowerCase();
-  const grid=document.getElementById("skillGrid");
+  const query=document.getElementById("skillSearch").value.toLowerCase();
 
-  const filtered=skills.filter(skill=>
-    skill.name.toLowerCase().includes(query)
-  );
+  const filtered=skills.filter(s=>s.name.toLowerCase().includes(query));
 
-  grid.innerHTML=filtered.map(skill=>{
-    const total=flatExercises(skill).length;
-    const done=getCompleted(skill).length;
+  document.getElementById("skillGrid").innerHTML=filtered.map(skill=>{
+    const total=allExercises(skill).length;
+    const done=completedCount(skill);
     const percent=Math.round(done/total*100);
 
     return `
       <button class="skill-card" data-skill="${skills.indexOf(skill)}">
+        <div class="skill-icon">${skill.icon}</div>
         <strong>${escapeHTML(skill.name)}</strong>
-        <span>${escapeHTML(skill.description)}</span>
-        <span class="percent">${done}/${total} exercises · ${percent}%</span>
+        <small>${escapeHTML(skill.description)}</small>
+        <div class="skill-percent">${done}/${total} completed · ${percent}%</div>
+        <div class="progress-track"><div class="progress-fill" style="width:${percent}%"></div></div>
       </button>
     `;
-  }).join("") || '<p class="empty">No skills found.</p>';
+  }).join("");
 }
 
-document.getElementById("search").addEventListener("input",renderSkills);
+document.getElementById("skillSearch").addEventListener("input",renderSkills);
 
 document.getElementById("skillGrid").addEventListener("click",event=>{
   const button=event.target.closest("[data-skill]");
   if(button) openSkill(Number(button.dataset.skill));
 });
 
-/* SKILL DETAILS */
-
-let currentSkill=null;
-
 function openSkill(index) {
   currentSkill=skills[index];
-
-  document.getElementById("skillTitle").textContent=currentSkill.name;
-  document.getElementById("skillDescription").textContent=currentSkill.description;
-
-  renderLevels();
+  document.getElementById("detailTitle").textContent=currentSkill.name;
+  document.getElementById("detailDescription").textContent=currentSkill.description;
+  renderSkillDetails();
   showScreen("detail");
 }
 
-function renderLevels() {
-  if(!currentSkill) return;
-
-  const saved=getCompleted(currentSkill);
-  const exercises=flatExercises(currentSkill);
+function renderSkillDetails() {
+  const saved=completed[currentSkill.name] || [];
+  const total=allExercises(currentSkill).length;
   const done=saved.length;
-  const percent=Math.round(done/exercises.length*100);
+  const percent=Math.round(done/total*100);
 
-  document.getElementById("skillStats").textContent=
-    `${done} of ${exercises.length} exercises completed · ${percent}%`;
+  document.getElementById("detailStats").textContent=
+    `${done} / ${total} exercises completed · ${percent}%`;
 
-  document.getElementById("skillBar").style.width=percent+"%";
+  document.getElementById("detailBar").style.width=percent+"%";
 
-  const names=[
-    "LEVEL 1 · COMPLETE BEGINNER",
-    "LEVEL 2 · BEGINNER",
-    "LEVEL 3 · INTERMEDIATE"
-  ];
-
-  const colors=["level-one","level-two","level-three"];
+  const labels=["LEVEL 1 · COMPLETE BEGINNER","LEVEL 2 · BEGINNER","LEVEL 3 · INTERMEDIATE"];
 
   let offset=0;
 
-  document.getElementById("levels").innerHTML=currentSkill.levels.map((level,i)=>{
+  document.getElementById("detailLevels").innerHTML=currentSkill.levels.map((level,i)=>{
     const start=offset;
     offset+=level.length;
 
-    const count=level.filter((_,j)=>saved.includes(start+j)).length;
-
     return `
-      <details class="level ${colors[i]}">
-        <summary>
-          <span class="level-label">${names[i]}</span>
-          ${count}/${level.length} exercises completed
-        </summary>
-
+      <details class="level">
+        <summary>${labels[i]}</summary>
         <div class="level-content">
           ${level.map((exercise,j)=>{
             const id=start+j;
-
-            const searchQuery=encodeURIComponent(
-              exercise+" calisthenics exercise tutorial proper technique"
-            );
-
-            const videoURL=
-              "https://www.youtube.com/results?search_query="+searchQuery;
+            const url="https://www.youtube.com/results?search_query="+encodeURIComponent(exercise+" calisthenics tutorial");
 
             return `
               <div class="exercise">
-                <input type="checkbox"
-                  data-exercise="${id}"
-                  id="check-${id}"
-                  ${saved.includes(id)?"checked":""}>
-
-                <div class="exercise-content">
-                  <label for="check-${id}">
-                    ${escapeHTML(exercise)}
-                  </label>
-
-                  <a
-                    class="video-link"
-                    href="${videoURL}"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    ▶ Watch tutorial
-                  </a>
-                </div>
+                <input type="checkbox" data-check="${id}" id="exercise-${id}" ${saved.includes(id)?"checked":""}>
+                <label for="exercise-${id}">
+                  ${escapeHTML(exercise)}
+                  <br>
+                  <a href="${url}" target="_blank" rel="noopener noreferrer" style="color:var(--orange);font-size:11px">Find a tutorial ↗</a>
+                </label>
               </div>
             `;
           }).join("")}
@@ -1027,194 +1082,111 @@ function renderLevels() {
   }).join("");
 }
 
-/* CHECKING SKILLS DOES NOT ADD WORKOUTS */
+document.getElementById("detailLevels").addEventListener("change",event=>{
+  if(!event.target.matches("[data-check]")) return;
 
-document.getElementById("levels").addEventListener("change",event=>{
-  if(!event.target.matches("[data-exercise]")) return;
+  const id=Number(event.target.dataset.check);
 
-  const id=Number(event.target.dataset.exercise);
-
-  if(!completed[currentSkill.name]) {
-    completed[currentSkill.name]=[];
-  }
+  if(!completed[currentSkill.name]) completed[currentSkill.name]=[];
 
   if(event.target.checked) {
-    if(!completed[currentSkill.name].includes(id)) {
-      completed[currentSkill.name].push(id);
-    }
+    if(!completed[currentSkill.name].includes(id)) completed[currentSkill.name].push(id);
   } else {
-    completed[currentSkill.name]=
-      completed[currentSkill.name].filter(x=>x!==id);
+    completed[currentSkill.name]=completed[currentSkill.name].filter(x=>x!==id);
   }
 
   save();
-
-  renderLevels();
-  renderSkills();
-  renderProgress();
+  renderSkillDetails();
+  renderDashboard();
 });
 
-document.getElementById("back").addEventListener("click",()=>{
-  showScreen("skills");
-});
+/* --------------------------------
+   RANKINGS
+-------------------------------- */
 
-/* RANKING SYSTEM */
-
-const rankingExercises = [
+const rankingData=[
   {
-    id:"pullups",
-    name:"Pull-ups",
-    description:"Enter your best clean pull-up repetitions.",
-    levels:[
-      {min:0,name:"Beginner",emoji:"🟤"},
-      {min:3,name:"Bronze",emoji:"🥉"},
-      {min:6,name:"Silver",emoji:"🥈"},
-      {min:10,name:"Gold",emoji:"🥇"},
-      {min:15,name:"Diamond",emoji:"💎"},
-      {min:21,name:"Elite",emoji:"👑"}
+    id:"pullups",name:"Pull-ups",levels:[
+      [0,"Beginner","🟤"],[3,"Bronze","🥉"],[6,"Silver","🥈"],
+      [10,"Gold","🥇"],[15,"Diamond","💎"],[21,"Elite","👑"]
     ]
   },
   {
-    id:"pushups",
-    name:"Push-ups",
-    description:"Enter your best clean push-up repetitions.",
-    levels:[
-      {min:0,name:"Beginner",emoji:"🟤"},
-      {min:10,name:"Bronze",emoji:"🥉"},
-      {min:20,name:"Silver",emoji:"🥈"},
-      {min:35,name:"Gold",emoji:"🥇"},
-      {min:50,name:"Diamond",emoji:"💎"},
-      {min:70,name:"Elite",emoji:"👑"}
+    id:"pushups",name:"Push-ups",levels:[
+      [0,"Beginner","🟤"],[10,"Bronze","🥉"],[20,"Silver","🥈"],
+      [35,"Gold","🥇"],[50,"Diamond","💎"],[70,"Elite","👑"]
     ]
   },
   {
-    id:"handstandPushups",
-    name:"Handstand Push-ups",
-    description:"Count controlled repetitions using a safe, appropriate progression.",
-    levels:[
-      {min:0,name:"Beginner",emoji:"🟤"},
-      {min:1,name:"Bronze",emoji:"🥉"},
-      {min:2,name:"Silver",emoji:"🥈"},
-      {min:4,name:"Gold",emoji:"🥇"},
-      {min:6,name:"Diamond",emoji:"💎"},
-      {min:9,name:"Elite",emoji:"👑"}
+    id:"handstandPushups",name:"Handstand Push-ups",levels:[
+      [0,"Beginner","🟤"],[1,"Bronze","🥉"],[2,"Silver","🥈"],
+      [4,"Gold","🥇"],[6,"Diamond","💎"],[9,"Elite","👑"]
     ]
   }
 ];
 
-function getRank(exercise,reps) {
-  let current=exercise.levels[0];
-
-  for(const level of exercise.levels) {
-    if(reps>=level.min) current=level;
-  }
-
-  return current;
-}
-
-function getNextRank(exercise,reps) {
-  return exercise.levels.find(level=>level.min>reps);
-}
-
 function renderRankings() {
-  const container=document.getElementById("rankingCards");
+  document.getElementById("rankingCards").innerHTML=rankingData.map(item=>{
+    const reps=Number(rankings[item.id]||0);
+    let current=item.levels[0];
 
-  container.innerHTML=rankingExercises.map(exercise=>{
-    const reps=Number(rankings[exercise.id] || 0);
-    const rank=getRank(exercise,reps);
-    const next=getNextRank(exercise,reps);
+    for(const level of item.levels) {
+      if(reps>=level[0]) current=level;
+    }
 
-    const nextText=next
-      ? `${next.min-reps} more clean reps to reach ${next.name}.`
-      : "You've reached the highest rank!";
-
-    const progress=next
-      ? Math.min(100,Math.round(
-          ((reps-rank.min)/(next.min-rank.min))*100
-        ))
-      : 100;
+    const next=item.levels.find(level=>level[0]>reps);
 
     return `
       <div class="rank-card">
-        <h3>${exercise.name}</h3>
-        <p class="muted">${exercise.description}</p>
-
-        <label class="form-label" for="rank-${exercise.id}">
-          Your best repetitions
-        </label>
-
-        <input
-          type="number"
-          id="rank-${exercise.id}"
-          data-rank="${exercise.id}"
-          min="0"
-          max="10000"
-          step="1"
-          value="${reps}"
-        >
-
-        <div class="rank-badge">
-          ${rank.emoji} ${rank.name}
-        </div>
-
-        <div class="rank-progress">
-          <div class="progress-track">
-            <div class="progress-fill" style="width:${progress}%"></div>
-          </div>
-        </div>
-
-        <p class="rank-next">${nextText}</p>
+        <h3>${item.name}</h3>
+        <label class="form-label">Your best clean repetitions</label>
+        <input type="number" min="0" max="10000" step="1" data-ranking="${item.id}" value="${reps}">
+        <div class="rank-badge">${current[2]} ${current[1]}</div>
+        <p class="muted" style="font-size:12px;margin-top:12px">
+          ${next ? (next[0]-reps)+" more reps to reach "+next[1] : "Highest app rank reached."}
+        </p>
       </div>
     `;
   }).join("");
 }
 
 document.getElementById("rankingCards").addEventListener("change",event=>{
-  if(!event.target.matches("[data-rank]")) return;
+  if(!event.target.matches("[data-ranking]")) return;
 
-  const id=event.target.dataset.rank;
   const value=Number(event.target.value);
-
-  if(!Number.isInteger(value) || value<0 || value>10000) {
-    alert("Please enter a whole number between 0 and 10,000.");
-    event.target.value=rankings[id] || 0;
+  if(!Number.isInteger(value)||value<0||value>10000) {
+    alert("Enter a whole number from 0 to 10,000.");
+    renderRankings();
     return;
   }
 
-  rankings[id]=value;
-
+  rankings[event.target.dataset.ranking]=value;
   save();
   renderRankings();
 });
 
-/* TRAINING PLANNER */
+/* --------------------------------
+   PLANNER AND CALENDAR
+-------------------------------- */
 
 let calendarDate=new Date();
 let selectedDate=today();
 
 function renderPlannerDays() {
-  const names=[
-    "Monday","Tuesday","Wednesday",
-    "Thursday","Friday","Saturday","Sunday"
-  ];
+  const names=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 
-  document.getElementById("plannerDays").innerHTML=
-    names.map((name,index)=>`
-      <label class="planner-day">
-        <input
-          type="checkbox"
-          data-planned-day="${index}"
-          ${trainingDays.includes(index)?"checked":""}
-        >
-        ${name}
-      </label>
-    `).join("");
+  document.getElementById("plannerDays").innerHTML=names.map((name,i)=>`
+    <label class="planner-day">
+      <input type="checkbox" data-day="${i}" ${trainingDays.includes(i)?"checked":""}>
+      ${name}
+    </label>
+  `).join("");
 }
 
 document.getElementById("plannerDays").addEventListener("change",event=>{
-  if(!event.target.matches("[data-planned-day]")) return;
+  if(!event.target.matches("[data-day]")) return;
 
-  const day=Number(event.target.dataset.plannedDay);
+  const day=Number(event.target.dataset.day);
 
   if(event.target.checked) {
     if(!trainingDays.includes(day)) trainingDays.push(day);
@@ -1224,17 +1196,14 @@ document.getElementById("plannerDays").addEventListener("change",event=>{
 
   save();
   renderCalendar();
+  renderDashboard();
 });
 
-function dateKey(year,month,day) {
-  return [
-    year,
-    String(month+1).padStart(2,"0"),
-    String(day).padStart(2,"0")
-  ].join("-");
+function keyDate(year,month,day) {
+  return year+"-"+String(month+1).padStart(2,"0")+"-"+String(day).padStart(2,"0");
 }
 
-function weekdayIndex(year,month,day) {
+function mondayIndex(year,month,day) {
   return (new Date(year,month,day).getDay()+6)%7;
 }
 
@@ -1242,77 +1211,52 @@ function renderCalendar() {
   const year=calendarDate.getFullYear();
   const month=calendarDate.getMonth();
 
-  document.getElementById("calendarMonth").textContent=
-    calendarDate.toLocaleDateString("en-GB",{
-      month:"long",
-      year:"numeric"
-    });
+  document.getElementById("calendarTitle").textContent=
+    calendarDate.toLocaleDateString("en-GB",{month:"long",year:"numeric"});
 
-  const firstDay=weekdayIndex(year,month,1);
-  const daysInMonth=new Date(year,month+1,0).getDate();
+  const first=mondayIndex(year,month,1);
+  const totalDays=new Date(year,month+1,0).getDate();
 
   const names=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 
-  let html=names.map(name=>
-    `<div class="day-name">${name}</div>`
-  ).join("");
+  let html=names.map(n=>`<div class="day-name">${n}</div>`).join("");
 
-  for(let i=0;i<firstDay;i++) {
-    html+='<div class="calendar-day empty-day"></div>';
-  }
+  for(let i=0;i<first;i++) html+='<div class="calendar-day empty"></div>';
 
-  for(let day=1;day<=daysInMonth;day++) {
-    const key=dateKey(year,month,day);
-    const isToday=key===today();
-    const isSelected=key===selectedDate;
-
-    const planned=trainingDays.includes(
-      weekdayIndex(year,month,day)
-    );
-
-    const hasWorkout=workouts.some(w=>w.date===key);
-
+  for(let day=1;day<=totalDays;day++) {
+    const key=keyDate(year,month,day);
+    const planned=trainingDays.includes(mondayIndex(year,month,day));
+    const finished=workouts.some(w=>w.date===key);
     const classes=[
       "calendar-day",
-      isToday?"today":"",
-      isSelected?"selected":"",
       planned?"planned":"",
-      hasWorkout?"completed":""
+      finished?"completed":"",
+      key===selectedDate?"selected":"",
+      key===today()?"today":""
     ].filter(Boolean).join(" ");
 
-    let marker="";
-
-    if(hasWorkout) marker="●";
-    else if(planned) marker="○";
-
     html+=`
-      <button type="button"
-        class="${classes}"
-        data-calendar-date="${key}"
-        aria-label="${key}${planned?", planned training":""}${hasWorkout?", completed workout":""}">
-        <span>${day}</span>
-        <span class="calendar-dot">${marker}</span>
+      <button class="${classes}" data-date="${key}">
+        ${day}
+        <span class="calendar-dot">${finished?"●":planned?"○":""}</span>
       </button>
     `;
   }
 
-  document.getElementById("calendarDays").innerHTML=html;
-
-  renderSelectedDay();
+  document.getElementById("calendarGrid").innerHTML=html;
+  renderSelectedDate();
 }
 
-document.getElementById("calendarDays").addEventListener("click",event=>{
-  const button=event.target.closest("[data-calendar-date]");
+document.getElementById("calendarGrid").addEventListener("click",event=>{
+  const button=event.target.closest("[data-date]");
   if(!button) return;
 
-  selectedDate=button.dataset.calendarDate;
-
-  document.getElementById("date").value=selectedDate;
-
+  selectedDate=button.dataset.date;
+  document.getElementById("workoutDate").value=selectedDate;
   renderCalendar();
 });
 
-document.getElementById("previousMonth").addEventListener("click",()=>{
+document.getElementById("prevMonth").addEventListener("click",()=>{
   calendarDate.setMonth(calendarDate.getMonth()-1);
   renderCalendar();
 });
@@ -1322,181 +1266,359 @@ document.getElementById("nextMonth").addEventListener("click",()=>{
   renderCalendar();
 });
 
-function renderSelectedDay() {
+function renderSelectedDate() {
   const dateWorkouts=workouts.filter(w=>w.date===selectedDate);
 
   document.getElementById("selectedDateTitle").textContent=
     new Date(selectedDate+"T12:00:00").toLocaleDateString("en-GB",{
-      weekday:"long",
-      day:"numeric",
-      month:"long",
-      year:"numeric"
+      weekday:"long",day:"numeric",month:"long",year:"numeric"
     });
 
-  const container=document.getElementById("selectedDayWorkouts");
-
-  if(!dateWorkouts.length) {
-    container.innerHTML=
-      '<p class="muted">No workouts recorded for this day yet.</p>';
-    return;
-  }
-
-  container.innerHTML=dateWorkouts.map(w=>`
-    <div class="log-entry">
-      <strong>${escapeHTML(w.exercise)}</strong>
-      <p>${Number(w.sets)} sets · ${Number(w.reps)} reps</p>
-      ${w.notes?`<p>${escapeHTML(w.notes)}</p>`:""}
-    </div>
-  `).join("");
+  document.getElementById("selectedWorkouts").innerHTML=dateWorkouts.length
+    ? dateWorkouts.map(w=>`
+      <div class="log-entry">
+        <strong>${escapeHTML(w.exercise)}</strong>
+        <p>${Number(w.sets)} sets · ${Number(w.reps)} reps</p>
+        <p>${escapeHTML(w.notes||"No notes")}</p>
+      </div>
+    `).join("")
+    : '<p class="muted">No workouts recorded for this date.</p>';
 }
 
-/* WORKOUT FORM */
+/* --------------------------------
+   WORKOUT LOG
+-------------------------------- */
 
-document.getElementById("date").value=today();
+document.getElementById("workoutDate").value=today();
 
-document.getElementById("date").addEventListener("change",event=>{
+document.getElementById("workoutDate").addEventListener("change",event=>{
   if(!event.target.value) return;
-
   selectedDate=event.target.value;
-
   const parts=selectedDate.split("-").map(Number);
-
   calendarDate=new Date(parts[0],parts[1]-1,1);
-
   renderCalendar();
 });
 
 document.getElementById("workoutForm").addEventListener("submit",event=>{
   event.preventDefault();
 
-  const date=document.getElementById("date").value;
-  const sets=Number(document.getElementById("sets").value);
-  const reps=Number(document.getElementById("reps").value);
+  const date=document.getElementById("workoutDate").value;
+  const exercise=document.getElementById("workoutExercise").value.trim();
+  const sets=Number(document.getElementById("workoutSets").value);
+  const reps=Number(document.getElementById("workoutReps").value);
+  const notes=document.getElementById("workoutNotes").value.trim();
 
-  if(!date || !Number.isInteger(sets) || sets<1 ||
-     !Number.isInteger(reps) || reps<1) {
-    alert("Please enter a valid date, sets and reps.");
+  if(!date||!exercise||!Number.isInteger(sets)||sets<1||
+     !Number.isInteger(reps)||reps<1) {
+    alert("Please enter valid workout details.");
     return;
   }
 
   workouts.unshift({
     id:Date.now(),
-    date:date,
-    exercise:document.getElementById("exercise").value,
-    sets:sets,
-    reps:reps,
-    notes:document.getElementById("notes").value
+    date,
+    exercise,
+    sets,
+    reps,
+    notes
   });
 
   selectedDate=date;
+  save();
+
+  event.target.reset();
+  document.getElementById("workoutDate").value=date;
 
   const parts=date.split("-").map(Number);
   calendarDate=new Date(parts[0],parts[1]-1,1);
 
-  save();
-
-  event.target.reset();
-  document.getElementById("date").value=date;
-
-  renderCalendar();
-  renderHistory();
+  renderWorkouts();
+  renderDashboard();
   renderProgress();
 });
 
-/* WORKOUT HISTORY */
-
-function renderHistory() {
-  const container=document.getElementById("history");
+function renderWorkoutHistory() {
+  const container=document.getElementById("workoutHistory");
 
   if(!workouts.length) {
-    container.innerHTML=
-      '<p class="empty">No workouts recorded yet.</p>';
+    container.innerHTML='<p class="empty">No workouts yet. Your first session will appear here.</p>';
     return;
   }
 
-  container.innerHTML=workouts.map(workout=>`
+  container.innerHTML=workouts.map(w=>`
     <div class="log-entry">
-      <button class="delete" data-delete="${Number(workout.id)}">
-        Delete
-      </button>
-
-      <strong>${escapeHTML(workout.exercise)}</strong>
-
-      <p>${escapeHTML(workout.date)}</p>
-
-      ${workout.type==="progression"
-        ? '<p>Skill progression completed</p>'
-        : `<p>${Number(workout.sets)} sets · ${Number(workout.reps)} reps</p>`
-      }
-
-      ${workout.notes?`<p>${escapeHTML(workout.notes)}</p>`:""}
+      <button class="btn btn-secondary btn-small" style="float:right" data-delete="${Number(w.id)}">Delete</button>
+      <strong>${escapeHTML(w.exercise)}</strong>
+      <p>${escapeHTML(w.date)}</p>
+      <p>${Number(w.sets)} sets · ${Number(w.reps)} reps per set</p>
+      <p>${escapeHTML(w.notes||"")}</p>
     </div>
   `).join("");
 }
 
-document.getElementById("history").addEventListener("click",event=>{
+document.getElementById("workoutHistory").addEventListener("click",event=>{
   const button=event.target.closest("[data-delete]");
   if(!button) return;
 
   const id=Number(button.dataset.delete);
-
   workouts=workouts.filter(w=>w.id!==id);
 
   save();
-
-  renderHistory();
-  renderCalendar();
+  renderWorkouts();
+  renderDashboard();
   renderProgress();
 });
 
-/* PROGRESS DASHBOARD */
+/* --------------------------------
+   REST TIMER
+-------------------------------- */
 
-function renderProgress() {
-  let started=0;
-  let total=0;
+let timerSeconds=90;
+let timerInterval=null;
 
-  skills.forEach(skill=>{
-    const count=getCompleted(skill).length;
+function updateTimer() {
+  const mins=Math.floor(timerSeconds/60);
+  const secs=timerSeconds%60;
 
-    if(count>0) started++;
+  document.getElementById("timerDisplay").textContent=
+    String(mins).padStart(2,"0")+":"+String(secs).padStart(2,"0");
+}
 
-    total+=count;
-  });
+function startTimer() {
+  if(timerInterval) return;
 
-  document.getElementById("started").textContent=started;
-  document.getElementById("done").textContent=total;
-  document.getElementById("workoutTotal").textContent=workouts.length;
+  if(timerSeconds<=0) timerSeconds=90;
 
-  document.getElementById("allProgress").innerHTML=skills.map(skill=>{
-    const count=getCompleted(skill).length;
-    const amount=flatExercises(skill).length;
-    const percent=Math.round(count/amount*100);
+  timerInterval=setInterval(()=>{
+    timerSeconds--;
+    updateTimer();
+
+    if(timerSeconds<=0) {
+      clearInterval(timerInterval);
+      timerInterval=null;
+      alert("Rest timer finished.");
+    }
+  },1000);
+}
+
+function pauseTimer() {
+  clearInterval(timerInterval);
+  timerInterval=null;
+}
+
+function resetTimer() {
+  pauseTimer();
+  timerSeconds=90;
+  updateTimer();
+}
+
+/* --------------------------------
+   DASHBOARD
+-------------------------------- */
+
+function renderDashboard() {
+  const xp=getXP();
+  const level=getLevel();
+  const progress=xp%250;
+
+  document.getElementById("dashboardStats").innerHTML=`
+    <div class="stat-card">
+      <div class="stat-label">TOTAL WORKOUTS</div>
+      <div class="stat-number">${workouts.length}</div>
+      <div class="stat-note">Keep building consistency</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">EXERCISES COMPLETED</div>
+      <div class="stat-number">${totalCompleted()}</div>
+      <div class="stat-note">Skill progression</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">ACHIEVEMENTS</div>
+      <div class="stat-number">${unlockedAchievements().length}</div>
+      <div class="stat-note">Milestones unlocked</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">TOTAL XP</div>
+      <div class="stat-number">${xp}</div>
+      <div class="stat-note">Level ${level}</div>
+    </div>
+  `;
+
+  document.getElementById("xpNumber").textContent=xp+" XP";
+  document.getElementById("levelName").textContent="LEVEL "+level;
+  document.getElementById("xpNext").textContent=(250-progress)+" XP until next level";
+  document.getElementById("xpBar").style.width=(progress/250*100)+"%";
+
+  renderWeeklyActivity();
+  renderNextTraining();
+  renderRecentAchievements();
+
+  document.getElementById("featuredSkills").innerHTML=skills.slice(0,3).map(s=>`
+    <div class="skill-card">
+      <div class="skill-icon">${s.icon}</div>
+      <strong>${s.name}</strong>
+      <small>${completedCount(s)}/${allExercises(s).length} completed</small>
+    </div>
+  `).join("");
+}
+
+function renderWeeklyActivity() {
+  const names=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  const now=new Date();
+  const monday=new Date(now);
+  monday.setDate(now.getDate()-((now.getDay()+6)%7));
+
+  let html="";
+
+  for(let i=0;i<7;i++) {
+    const date=new Date(monday);
+    date.setDate(monday.getDate()+i);
+
+    const key=date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0")+"-"+String(date.getDate()).padStart(2,"0");
+    const count=workouts.filter(w=>w.date===key).length;
+
+    html+=`
+      <div class="bar-row">
+        <span>${names[i]}</span>
+        <div class="bar"><div style="width:${Math.min(count*25,100)}%"></div></div>
+        <span>${count}</span>
+      </div>
+    `;
+  }
+
+  document.getElementById("weeklyActivity").innerHTML=html;
+}
+
+function renderNextTraining() {
+  const container=document.getElementById("nextTraining");
+
+  if(!trainingDays.length) {
+    container.innerHTML='<p class="muted">Choose your planned training days in the workout planner.</p>';
+    return;
+  }
+
+  const todayIndex=(new Date().getDay()+6)%7;
+
+  let daysUntil=7;
+
+  for(let i=0;i<7;i++) {
+    const day=(todayIndex+i)%7;
+    if(trainingDays.includes(day)) {
+      daysUntil=i;
+      break;
+    }
+  }
+
+  const next=new Date();
+  next.setDate(next.getDate()+daysUntil);
+
+  container.innerHTML=`
+    <div class="stat-number">${next.toLocaleDateString("en-GB",{weekday:"long"})}</div>
+    <p class="muted">${next.toLocaleDateString("en-GB",{day:"numeric",month:"long"})}</p>
+  `;
+}
+
+function renderRecentAchievements() {
+  const list=unlockedAchievements().slice(-3).reverse();
+
+  document.getElementById("recentAchievements").innerHTML=list.length
+    ? list.map(a=>`<div style="margin:9px 0">${a.icon} ${a.name}</div>`).join("")
+    : '<p class="muted">Your achievements will appear here.</p>';
+}
+
+/* --------------------------------
+   ACHIEVEMENTS
+-------------------------------- */
+
+function renderAchievements() {
+  document.getElementById("achievementGrid").innerHTML=achievements.map(a=>{
+    const unlocked=a.check();
 
     return `
-      <div style="margin:18px 0">
-        <div style="display:flex;justify-content:space-between;gap:10px">
-          <strong>${escapeHTML(skill.name)}</strong>
+      <div class="achievement ${unlocked?"unlocked":"locked"}">
+        <div class="achievement-icon">${a.icon}</div>
+        <strong>${a.name}</strong>
+        <small>${a.desc}</small>
+        <p style="font-size:11px;margin:10px 0 0;color:${unlocked?"var(--green)":"var(--muted)"}">
+          ${unlocked?"✓ UNLOCKED":"LOCKED"}
+        </p>
+      </div>
+    `;
+  }).join("");
+}
+
+/* --------------------------------
+   PROGRESS
+-------------------------------- */
+
+function renderProgress() {
+  const xp=getXP();
+
+  document.getElementById("progressStats").innerHTML=`
+    <div class="stat-card">
+      <div class="stat-label">WORKOUTS</div>
+      <div class="stat-number">${workouts.length}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">SKILL EXERCISES</div>
+      <div class="stat-number">${totalCompleted()}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">EXPERIENCE POINTS</div>
+      <div class="stat-number">${xp}</div>
+    </div>
+  `;
+
+  document.getElementById("skillProgressList").innerHTML=skills.map(s=>{
+    const done=completedCount(s);
+    const total=allExercises(s).length;
+    const percent=Math.round(done/total*100);
+
+    return `
+      <div style="margin:17px 0">
+        <div style="display:flex;justify-content:space-between">
+          <strong>${s.name}</strong>
           <span class="muted">${percent}%</span>
         </div>
-
         <div class="progress-track">
           <div class="progress-fill" style="width:${percent}%"></div>
         </div>
       </div>
     `;
   }).join("");
+
+  document.getElementById("progressHistory").innerHTML=workouts.length
+    ? workouts.slice(0,10).map(w=>`
+      <div class="log-entry">
+        <strong>${escapeHTML(w.exercise)}</strong>
+        <p>${escapeHTML(w.date)} · ${Number(w.sets)} sets × ${Number(w.reps)} reps</p>
+      </div>
+    `).join("")
+    : '<p class="muted">Your workout history will appear here.</p>';
 }
 
-/* INITIALISE */
+/* --------------------------------
+   RENDER WORKOUT SCREEN
+-------------------------------- */
+
+function renderWorkouts() {
+  renderPlannerDays();
+  renderCalendar();
+  renderWorkoutHistory();
+  updateTimer();
+}
+
+/* --------------------------------
+   INITIALISE
+-------------------------------- */
 
 renderSkills();
 renderRankings();
-renderPlannerDays();
-renderCalendar();
-renderHistory();
+renderDashboard();
+renderAchievements();
 renderProgress();
+renderWorkouts();
 
 </script>
-
 </body>
 </html>
