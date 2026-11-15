@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calisthenics Pro</title>
+<meta name="theme-color" content="#101713">
+
+<style>
+:root {
+  --bg:#101713;
+  --panel:#19231d;
+  --panel2:#223128;
+  --green:#a8e6a1;
+  --blue:#83c9ff;
+  --purple:#c6a5ff;
+  --text:#f0f5ed;
+  --muted:#a2b1a5;
+  --border:#34453a;
+}
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+}
+
+header {
+  padding:25px 18px;
+  background:#141e18;
+  border-bottom:1px solid var(--border);
+}
+
+.header-inner, main {
+  max-width:1050px;
+  margin:auto;
+}
+
+.logo {
+  color:var(--green);
+  font-weight:bold;
+  letter-spacing:3px;
+  font-size:12px;
+}
+
+h1 { margin:12px 0 5px; }
+
+header p,.muted { color:var(--muted); }
+
+nav {
+  display:flex;
+  gap:8px;
+  margin-top:20px;
+  flex-wrap:wrap;
+}
+
+button {
+  cursor:pointer;
+  font:inherit;
+}
+
+nav button,.secondary {
+  background:transparent;
+  color:var(--muted);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:11px 16px;
+}
+
+nav button.active {
+  background:var(--green);
+  color:#102014;
+}
+
+main { padding:25px 18px 50px; }
+
+.screen { display:none; }
+.screen.active { display:block; }
+
+h2 { margin-bottom:6px; }
+
+.description {
+  color:var(--muted);
+  margin-top:0;
+  margin-bottom:22px;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:13px;
+}
+
+.skill-card {
+  text-align:left;
+  width:100%;
+  background:var(--panel);
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:19px;
+}
+
+.skill-card:hover {
+  border-color:var(--green);
+  background:var(--panel2);
+}
+
+.skill-card strong {
+  display:block;
+  font-size:18px;
+  margin-bottom:8px;
+}
+
+.skill-card span {
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.skill-card .percent {
+  color:var(--green);
+  margin-top:12px;
+}
+
+.panel {
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:18px;
+  margin-bottom:16px;
+}
+
+input,textarea {
+  width:100%;
+  background:var(--bg);
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px;
+  font:inherit;
+}
+
+.search { margin-bottom:18px; }
+
+.progress-track {
+  height:8px;
+  background:#34453a;
+  border-radius:20px;
+  overflow:hidden;
+  margin:12px 0;
+}
+
+.progress-fill {
+  height:100%;
+  background:var(--green);
+  border-radius:20px;
+}
+
+.level {
+  border:1px solid var(--border);
+  border-radius:10px;
+  margin:13px 0;
+  overflow:hidden;
+}
+
+.level summary {
+  cursor:pointer;
+  padding:16px;
+  background:var(--panel2);
+  font-weight:bold;
+  list-style:none;
+}
+
+.level summary::-webkit-details-marker { display:none; }
+
+.level summary:after {
+  content:"+";
+  float:right;
+  color:var(--green);
+}
+
+.level[open] summary:after { content:"−"; }
+
+.level-content { padding:12px; }
+
+.level-one summary { border-left:4px solid var(--green); }
+.level-two summary { border-left:4px solid var(--blue); }
+.level-three summary { border-left:4px solid var(--purple); }
+
+.level-label {
+  display:block;
+  font-size:11px;
+  margin-bottom:5px;
+  letter-spacing:1px;
+  color:var(--muted);
+}
+
+.exercise {
+  display:flex;
+  gap:12px;
+  padding:14px;
+  background:var(--panel2);
+  border-radius:8px;
+  margin:9px 0;
+  align-items:flex-start;
+}
+
+.exercise input {
+  width:19px;
+  height:19px;
+  accent-color:var(--green);
+  flex-shrink:0;
+  margin-top:2px;
+}
+
+.exercise label {
+  cursor:pointer;
+  font-size:14px;
+  line-height:1.5;
+}
+
+.exercise input:checked + label {
+  text-decoration:line-through;
+  color:var(--muted);
+}
+
+.primary {
+  background:var(--green);
+  color:#102014;
+  border:0;
+  padding:12px 17px;
+  border-radius:8px;
+  font-weight:bold;
+  margin-top:10px;
+}
+
+.form-label {
+  display:block;
+  margin:15px 0 7px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.log-entry {
+  padding:14px;
+  background:var(--panel2);
+  border-radius:8px;
+  margin:10px 0;
+  border:1px solid var(--border);
+}
+
+.log-entry strong { color:var(--green); }
+
+.log-entry p {
+  color:var(--muted);
+  font-size:13px;
+}
+
+.delete {
+  float:right;
+  background:transparent;
+  color:#ff9b91;
+  border:1px solid var(--border);
+  padding:6px 9px;
+  border-radius:6px;
+}
+
+.stats {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.stat {
+  background:var(--panel);
+  padding:17px;
+  border:1px solid var(--border);
+  border-radius:10px;
+}
+
+.number {
+  color:var(--green);
+  font-size:27px;
+  font-weight:bold;
+  margin-top:8px;
+}
+
+.empty {
+  color:var(--muted);
+  padding:25px;
+  text-align:center;
+}
+
+footer {
+  text-align:center;
+  color:var(--muted);
+  padding:20px;
+  border-top:1px solid var(--border);
+  font-size:12px;
+}
+
+@media(max-width:500px) {
+  nav button { flex:1; padding:10px 7px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="header-inner">
+<div class="logo">CALISTHENICS / PRO</div>
+<h1>Build Your Strength.</h1>
+<p>Start from zero. Build your skills. Track your progress.</p>
+
+<nav>
+<button class="active" data-screen="skills">Skills</button>
+<button data-screen="workouts">Workout Log</button>
+<button data-screen="progress">Progress</button>
+</nav>
+</div>
+</header>
+
+<main>
+
+<section id="skills" class="screen active">
+<h2>Skill Library</h2>
+<p class="description">Choose a skill and work through its three levels.</p>
+<input class="search" id="search" placeholder="Search skills...">
+<div class="grid" id="skillGrid"></div>
+</section>
+
+<section id="detail" class="screen">
+<button class="secondary" id="back">← Back to skills</button>
+<div class="panel" style="margin-top:18px">
+<h2 id="skillTitle"></h2>
+<p class="muted" id="skillDescription"></p>
+<p id="skillStats" class="muted"></p>
+<div class="progress-track">
+<div class="progress-fill" id="skillBar"></div>
+</div>
+<div id="levels"></div>
+</div>
+</section>
+
+<section id="workouts" class="screen">
+<h2>Workout Log</h2>
+<p class="description">Record your training sessions.</p>
+
+<div class="panel">
+<form id="workoutForm">
+
+<label class="form-label">Date</label>
+<input type="date" id="date" required>
+
+<label class="form-label">Exercise</label>
+<input id="exercise" placeholder="Example: Pull-ups" required>
+
+<label class="form-label">Sets</label>
+<input type="number" id="sets" min="1" required>
+
+<label class="form-label">Reps</label>
+<input type="number" id="reps" min="1" required>
+
+<label class="form-label">Notes</label>
+<textarea id="notes" rows="3"></textarea>
+
+<button class="primary" type="submit">Save workout</button>
+</form>
+</div>
+
+<div class="panel">
+<h3>Workout History</h3>
+<div id="history"></div>
+</div>
+</section>
+
+<section id="progress" class="screen">
+<h2>Your Progress</h2>
+<p class="description">See how far you have progressed.</p>
+
+<div class="stats">
+<div class="stat">
+<div class="muted">Skills started</div>
+<div class="number" id="started">0</div>
+</div>
+
+<div class="stat">
+<div class="muted">Exercises completed</div>
+<div class="number" id="done">0</div>
+</div>
+
+<div class="stat">
+<div class="muted">Workouts</div>
+<div class="number" id="workoutTotal">0</div>
+</div>
+</div>
+
+<div class="panel">
+<h3>All Skill Progress</h3>
+<div id="allProgress"></div>
+</div>
+</section>
+
+</main>
+
+<footer>CALISTHENICS PRO · CONSISTENCY OVER PERFECTION</footer>
+
+<script>
+"use strict";
+
+/* SKILL LIBRARY */
+
+const skills = [
+{
+name:"Pull-up",
+description:"Build pulling strength from your very first hang.",
+levels:[
+["Dead hangs.","Active hangs.","Scapular pull-ups.","Shoulder circles."],
+["Australian rows.","Assisted pull-ups.","Foot-assisted pull-ups.","Negative pull-ups."],
+["Full pull-ups.","Controlled pull-ups.","Chest-to-bar preparation.","Comfortable grip variations."]
+]
+},
+{
+name:"Push-up",
+description:"Develop pushing strength and body control.",
+levels:[
+["Wall push-ups.","High incline push-ups.","Wall shoulder taps.","Elevated plank holds."],
+["Lower incline push-ups.","Knee push-ups.","Negative push-ups.","Full push-up practice."],
+["Full push-ups.","Close-grip preparation.","Decline push-up preparation.","Controlled repetitions."]
+]
+},
+{
+name:"Muscle-up",
+description:"Build pulling and pushing strength.",
+levels:[
+["Dead hangs.","Active hangs.","Scapular pull-ups.","Australian rows.","Wall push-ups."],
+["Assisted pull-ups.","Negative pull-ups.","Straight-bar support holds.","Assisted straight-bar dips."],
+["Strong full pull-ups.","High pull-up preparation.","Straight-bar dips.","Transition practice with qualified coaching."]
+]
+},
+{
+name:"Handstand",
+description:"Develop balance, wrist comfort and shoulder strength.",
+levels:[
+["Wrist circles.","Wrist mobility.","Wall plank holds.","Downward dog holds.","Bear holds."],
+["Pike holds.","Elevated pike holds.","Supervised wall walks.","Wall-supported preparation."],
+["Wall-supported handstand holds.","Handstand weight shifts.","Controlled wall practice.","Balance preparation with qualified coaching."]
+]
+},
+{
+name:"Front Lever",
+description:"Build back and core strength.",
+levels:[
+["Dead hangs.","Active hangs.","Scapular pull-ups.","Dead bugs.","Hollow-body holds."],
+["Australian rows.","Inverted rows.","Tuck hollow holds.","Glute bridges.","Assisted tuck preparation."],
+["Tuck front lever preparation.","Advanced tuck preparation.","Lever progression with coaching.","Controlled holds."]
+]
+},
+{
+name:"Back Lever",
+description:"Prepare your shoulders, back and core.",
+levels:[
+["Dead hangs.","Active hangs.","Scapular pull-ups.","Hollow-body holds.","Glute bridges."],
+["Reverse plank holds.","Australian rows.","Shoulder mobility.","Core stability."],
+["Back lever preparation with coaching.","Assisted tuck practice.","Controlled progression."]
+]
+},
+{
+name:"Planche",
+description:"Build wrist and shoulder strength.",
+levels:[
+["Wrist circles.","Wrist mobility.","Wall push-ups.","High plank holds.","Scapular push-ups."],
+["Knee push-ups.","Bear holds.","Light planche lean preparation.","Controlled plank shoulder shifts."],
+["Planche lean progression.","Shoulder stability exercises.","Tuck planche preparation with qualified coaching."]
+]
+},
+{
+name:"L-Sit",
+description:"Build core strength and support control.",
+levels:[
+["Dead bugs.","Seated knee raises.","Seated leg lifts.","Glute bridges."],
+["Support holds on stable parallettes.","Tuck support holds.","Alternating knee lifts.","Reverse crunches."],
+["Tuck L-sit holds.","One-leg preparation.","L-sit holds.","Controlled practice."]
+]
+},
+{
+name:"Pistol Squat",
+description:"Build single-leg balance and strength.",
+levels:[
+["Bodyweight squats.","Single-leg balance.","Supported split squats.","Glute bridges."],
+["Reverse lunges.","Box squats.","Supported single-leg squats.","Low step-ups."],
+["Assisted pistol squats.","Controlled negatives.","Pistol squat practice."]
+]
+},
+{
+name:"Dragon Flag",
+description:"Build core strength and body control.",
+levels:[
+["Dead bugs.","Bird dogs.","Glute bridges.","Plank holds."],
+["Reverse crunches.","Hollow-body holds.","Side plank holds.","Controlled leg raises."],
+["Advanced hollow holds.","Dragon flag preparation with qualified coaching.","Controlled progression."]
+]
+},
+{
+name:"Human Flag",
+description:"Develop lateral core and shoulder strength.",
+levels:[
+["Side plank from knees.","Bird dogs.","Wall push-ups.","Shoulder mobility."],
+["Full side planks.","Supported rows.","Shoulder stability exercises.","Side plank variations."],
+["Human flag preparation with qualified coaching.","Assisted position practice.","Controlled progression."]
+]
+},
+{
+name:"V-Sit",
+description:"Build core compression and flexibility.",
+levels:[
+["Dead bugs.","Seated knee raises.","Seated leg lifts.","Gentle pike stretches."],
+["Compression lifts.","Tuck support holds.","Reverse crunches.","Seated forward reaches."],
+["Tuck V-sit preparation.","One-leg V-sit preparation.","V-sit practice."]
+]
+}
+];
+
+/* STORAGE */
+
+function load(key,fallback) {
+  try {
+    const value=localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
+  } catch(error) {
+    return fallback;
+  }
+}
+
+let completed=load("calisthenics_completed",{});
+let workouts=load("calisthenics_workouts",[]);
+
+function save() {
+  try {
+    localStorage.setItem("calisthenics_completed",JSON.stringify(completed));
+    localStorage.setItem("calisthenics_workouts",JSON.stringify(workouts));
+  } catch(error) {
+    alert("Your browser could not save the data.");
+  }
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g,c=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  })[c]);
+}
+
+function today() {
+  const d=new Date();
+  return [
+    d.getFullYear(),
+    String(d.getMonth()+1).padStart(2,"0"),
+    String(d.getDate()).padStart(2,"0")
+  ].join("-");
+}
+
+/* NAVIGATION */
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(screen=>{
+    screen.classList.remove("active");
+  });
+
+  document.getElementById(id).classList.add("active");
+
+  document.querySelectorAll("nav button").forEach(button=>{
+    button.classList.toggle("active",button.dataset.screen===id);
+  });
+
+  if(id==="skills") renderSkills();
+  if(id==="progress") renderProgress();
+  if(id==="workouts") renderHistory();
+}
+
+document.querySelectorAll("nav button").forEach(button=>{
+  button.addEventListener("click",()=>{
+    showScreen(button.dataset.screen);
+  });
+});
+
+/* SKILL PROGRESS */
+
+function flatExercises(skill) {
+  return skill.levels.flat();
+}
+
+function getCompleted(skill) {
+  return completed[skill.name] || [];
+}
+
+function renderSkills() {
+  const query=document.getElementById("search").value.toLowerCase();
+  const grid=document.getElementById("skillGrid");
+
+  const filtered=skills.filter(skill=>
+    skill.name.toLowerCase().includes(query)
+  );
+
+  grid.innerHTML=filtered.map(skill=>{
+    const total=flatExercises(skill).length;
+    const done=getCompleted(skill).length;
+    const percent=Math.round(done/total*100);
+
+    return `
+      <button class="skill-card" data-skill="${skills.indexOf(skill)}">
+        <strong>${escapeHTML(skill.name)}</strong>
+        <span>${escapeHTML(skill.description)}</span>
+        <span class="percent">${done}/${total} exercises · ${percent}%</span>
+      </button>
+    `;
+  }).join("") || '<p class="empty">No skills found.</p>';
+}
+
+document.getElementById("search").addEventListener("input",renderSkills);
+
+document.getElementById("skillGrid").addEventListener("click",event=>{
+  const button=event.target.closest("[data-skill]");
+  if(button) openSkill(Number(button.dataset.skill));
+});
+
+/* SKILL DETAILS */
+
+let currentSkill=null;
+
+function openSkill(index) {
+  currentSkill=skills[index];
+
+  document.getElementById("skillTitle").textContent=currentSkill.name;
+  document.getElementById("skillDescription").textContent=currentSkill.description;
+
+  renderLevels();
+  showScreen("detail");
+}
+
+function renderLevels() {
+  if(!currentSkill) return;
+
+  const saved=getCompleted(currentSkill);
+  const exercises=flatExercises(currentSkill);
+  const done=saved.length;
+  const percent=Math.round(done/exercises.length*100);
+
+  document.getElementById("skillStats").textContent=
+    `${done} of ${exercises.length} exercises completed · ${percent}%`;
+
+  document.getElementById("skillBar").style.width=percent+"%";
+
+  const names=[
+    "LEVEL 1 · COMPLETE BEGINNER",
+    "LEVEL 2 · BEGINNER",
+    "LEVEL 3 · INTERMEDIATE"
+  ];
+
+  const colors=["level-one","level-two","level-three"];
+
+  let offset=0;
+
+  document.getElementById("levels").innerHTML=currentSkill.levels.map((level,i)=>{
+    const start=offset;
+    offset+=level.length;
+
+    const count=level.filter((_,j)=>saved.includes(start+j)).length;
+
+    return `
+      <details class="level ${colors[i]}">
+        <summary>
+          <span class="level-label">${names[i]}</span>
+          ${count}/${level.length} exercises completed
+        </summary>
+
+        <div class="level-content">
+          ${level.map((exercise,j)=>{
+            const id=start+j;
+
+            return `
+              <div class="exercise">
+                <input type="checkbox"
+                  data-exercise="${id}"
+                  id="check-${id}"
+                  ${saved.includes(id)?"checked":""}>
+
+                <label for="check-${id}">
+                  ${escapeHTML(exercise)}
+                </label>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      </details>
+    `;
+  }).join("");
+}
+
+document.getElementById("levels").addEventListener("change",event=>{
+  if(!event.target.matches("[data-exercise]")) return;
+
+  const id=Number(event.target.dataset.exercise);
+  const exerciseName=flatExercises(currentSkill)[id];
+
+  if(!completed[currentSkill.name]) {
+    completed[currentSkill.name]=[];
+  }
+
+  if(event.target.checked) {
+    if(!completed[currentSkill.name].includes(id)) {
+      completed[currentSkill.name].push(id);
+
+      workouts.unshift({
+        id:Date.now(),
+        date:today(),
+        exercise:currentSkill.name+" - "+exerciseName,
+        type:"progression",
+        notes:"Skill progression completed!"
+      });
+    }
+  } else {
+    completed[currentSkill.name]=
+      completed[currentSkill.name].filter(x=>x!==id);
+  }
+
+  save();
+  renderLevels();
+});
+
+document.getElementById("back").addEventListener("click",()=>{
+  showScreen("skills");
+});
+
+/* WORKOUT LOG */
+
+document.getElementById("date").value=today();
+
+document.getElementById("workoutForm").addEventListener("submit",event=>{
+  event.preventDefault();
+
+  workouts.unshift({
+    id:Date.now(),
+    date:document.getElementById("date").value,
+    exercise:document.getElementById("exercise").value,
+    sets:Number(document.getElementById("sets").value),
+    reps:Number(document.getElementById("reps").value),
+    notes:document.getElementById("notes").value
+  });
+
+  save();
+
+  event.target.reset();
+  document.getElementById("date").value=today();
+
+  renderHistory();
+  renderProgress();
+});
+
+function renderHistory() {
+  const container=document.getElementById("history");
+
+  if(!workouts.length) {
+    container.innerHTML='<p class="empty">No workouts recorded yet.</p>';
+    return;
+  }
+
+  container.innerHTML=workouts.map(workout=>`
+    <div class="log-entry">
+      <button class="delete" data-delete="${Number(workout.id)}">Delete</button>
+
+      <strong>${escapeHTML(workout.exercise)}</strong>
+
+      <p>${escapeHTML(workout.date)}</p>
+
+      ${workout.type==="progression"
+        ? '<p>✓ Skill progression completed</p>'
+        : `<p>${Number(workout.sets)} sets · ${Number(workout.reps)} reps</p>`
+      }
+
+      ${workout.notes ? `<p>${escapeHTML(workout.notes)}</p>` : ""}
+    </div>
+  `).join("");
+}
+
+document.getElementById("history").addEventListener("click",event=>{
+  const button=event.target.closest("[data-delete]");
+  if(!button) return;
+
+  const id=Number(button.dataset.delete);
+
+  workouts=workouts.filter(workout=>workout.id!==id);
+
+  save();
+  renderHistory();
+  renderProgress();
+});
+
+/* PROGRESS DASHBOARD */
+
+function renderProgress() {
+  let started=0;
+  let total=0;
+
+  skills.forEach(skill=>{
+    const count=getCompleted(skill).length;
+
+    if(count>0) started++;
+
+    total+=count;
+  });
+
+  document.getElementById("started").textContent=started;
+  document.getElementById("done").textContent=total;
+  document.getElementById("workoutTotal").textContent=workouts.length;
+
+  document.getElementById("allProgress").innerHTML=skills.map(skill=>{
+    const count=getCompleted(skill).length;
+    const amount=flatExercises(skill).length;
+    const percent=Math.round(count/amount*100);
+
+    return `
+      <div style="margin:18px 0">
+        <div style="display:flex;justify-content:space-between;gap:10px">
+          <strong>${escapeHTML(skill.name)}</strong>
+          <span class="muted">${percent}%</span>
+        </div>
+
+        <div class="progress-track">
+          <div class="progress-fill" style="width:${percent}%"></div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+/* INITIALISE */
+
+try {
+  renderSkills();
+  renderHistory();
+  renderProgress();
+} catch(error) {
+  document.body.insertAdjacentHTML(
+    "afterbegin",
+    `<div style="background:#401818;color:white;padding:15px">
+      Something went wrong: ${escapeHTML(error.message)}
+    </div>`
+  );
+
+  console.error(error);
+}
+
+</script>
+
+</body>
+</html>
