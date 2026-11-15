@@ -46,9 +46,7 @@ header {
 
 h1 { margin: 10px 0 5px; }
 
-header p, .muted {
-  color: var(--muted);
-}
+header p, .muted { color: var(--muted); }
 
 nav {
   display: flex;
@@ -76,9 +74,7 @@ nav button.active, nav button:hover {
   border-color: var(--green);
 }
 
-main {
-  padding: 28px 18px 50px;
-}
+main { padding: 28px 18px 50px; }
 
 .screen { display: none; }
 .screen.active { display: block; }
@@ -131,6 +127,7 @@ h2 { margin-bottom: 6px; }
   display: block;
   color: var(--muted);
   font-size: 13px;
+  line-height: 1.5;
 }
 
 .skill-button .skill-progress-text {
@@ -298,49 +295,37 @@ footer {
 
 <main>
 
-<!-- SKILLS LIST -->
 <section id="skills" class="screen active">
   <h2>Skill Library</h2>
-  <p class="section-description">Choose a skill to view its progression.</p>
-
+  <p class="section-description">Choose a skill to view its beginner exercises.</p>
   <input id="search" class="search" placeholder="Search for a skill...">
-
   <div id="skillGrid" class="grid"></div>
 </section>
 
-<!-- INDIVIDUAL SKILL -->
 <section id="skillDetail" class="screen">
-  <button class="secondary-button back-button" id="backButton">
-    ← Back to skills
-  </button>
-
+  <button class="secondary-button back-button" id="backButton">← Back to skills</button>
   <div class="panel">
     <h2 id="detailTitle">Skill</h2>
     <p id="detailDescription" class="muted"></p>
-
     <div id="detailCount" class="muted"></div>
-
     <div class="progress-track">
       <div id="detailProgress" class="progress-fill"></div>
     </div>
-
     <div id="stageList"></div>
   </div>
 </section>
 
-<!-- WORKOUT LOG -->
 <section id="workouts" class="screen">
   <h2>Workout Log</h2>
   <p class="section-description">Record your training sessions.</p>
 
   <div class="panel">
     <form id="workoutForm">
-
       <label class="form-label" for="date">Date</label>
       <input type="date" id="date" required>
 
       <label class="form-label" for="exercise">Exercise</label>
-      <input id="exercise" placeholder="Example: Pull-ups" required>
+      <input id="exercise" placeholder="Example: Push-ups" required>
 
       <label class="form-label" for="sets">Sets</label>
       <input id="sets" type="number" min="1" required>
@@ -361,7 +346,6 @@ footer {
   </div>
 </section>
 
-<!-- PROGRESS -->
 <section id="progress" class="screen">
   <h2>Your Progress</h2>
   <p class="section-description">Your training overview.</p>
@@ -371,12 +355,10 @@ footer {
       <div class="muted">Skills started</div>
       <div class="stat-number" id="startedCount">0</div>
     </div>
-
     <div class="card">
       <div class="muted">Stages completed</div>
       <div class="stat-number" id="stageCount">0</div>
     </div>
-
     <div class="card">
       <div class="muted">Workouts logged</div>
       <div class="stat-number" id="workoutCount">0</div>
@@ -393,160 +375,157 @@ footer {
 
 <footer>CALISTHENICS TRACKER · Stay consistent · Train smart</footer>
 
-
 <script>
 "use strict";
 
 /* SKILL DATA */
 
 const skills = [
-
-
 {
 name: "Muscle-up",
-description: "Beginner exercises to build pulling and pushing strength.",
+description: "Build the pulling and pushing strength needed for a muscle-up.",
 stages: [
-"Dead hangs — practise a comfortable, relaxed grip.",
+"Dead hangs — practise a comfortable grip on a suitable bar.",
 "Scapular pull-ups — practise controlled shoulder movement.",
-"Australian rows — keep your body straight and pull your chest towards the bar.",
-"Assisted pull-ups — use a stable assistance method.",
-"Straight-bar support holds — practise supporting your body with straight arms."
+"Australian rows — pull your chest towards a stable bar.",
+"Assisted pull-ups — use a safe assistance method.",
+"Push-ups — practise controlled pushing strength.",
+"Straight-bar support holds — practise supporting yourself with straight arms."
 ]
 },
-
 {
 name: "Handstand",
-description: "Beginner balance, wrist and shoulder preparation.",
+description: "Build balance, wrist comfort and shoulder strength.",
 stages: [
-"Wrist circles and gentle wrist mobility.",
+"Wrist circles — gently warm up your wrists.",
 "Wall push-ups — practise controlled shoulder movement.",
-"Downward dog holds — build comfortable shoulder support.",
-"Pike holds — practise keeping your hips raised.",
-"Bear holds — practise keeping your body stable on hands and feet."
+"Downward dog holds — practise comfortable shoulder support.",
+"Pike holds — practise raising your hips while supporting yourself.",
+"Bear holds — practise balance on hands and feet.",
+"Wall plank holds — practise stable body alignment."
 ]
 },
-
 {
 name: "Front Lever",
-description: "Beginner back and core preparation.",
+description: "Build beginner back and core strength.",
 stages: [
-"Dead hangs — practise comfortable grip and shoulder positioning.",
-"Scapular pull-ups — practise controlled shoulder movement.",
-"Hollow-body holds — keep your core engaged.",
-"Glute bridges — practise full-body control.",
-"Australian rows — pull with controlled movement."
-]
-},
-
-{
-name: "Back Lever",
-description: "Beginner shoulder, core and pulling preparation.",
-stages: [
-"Dead hangs — build comfortable grip familiarity.",
+"Dead hangs — practise comfortable grip.",
 "Scapular pull-ups — practise shoulder control.",
-"Hollow-body holds — practise core tension.",
-"Reverse plank holds — build posterior-chain strength.",
+"Dead bugs — practise core stability.",
+"Hollow-body holds — practise keeping your core engaged.",
+"Glute bridges — practise hip control.",
 "Australian rows — practise controlled pulling."
 ]
 },
-
 {
-name: "Planche",
-description: "Beginner wrist, shoulder and pushing preparation.",
-stages: [
-"Wrist circles and gentle wrist mobility.",
-"Wall push-ups — practise controlled pushing.",
-"High plank holds — practise stable body alignment.",
-"Scapular push-ups — practise shoulder blade movement.",
-"Knee push-ups — build controlled pushing strength."
-]
-},
-
-{
-name: "L-Sit",
-description: "Beginner core compression and support exercises.",
-stages: [
-"Seated knee raises — practise lifting one or both knees.",
-"Seated leg lifts — practise controlled leg movement.",
-"Dead bugs — practise core control.",
-"Support holds on stable parallettes or suitable handles.",
-"Tuck support holds — practise lifting your feet briefly."
-]
-},
-
-{
-name: "Pull-ups",
-description: "Beginner exercises for pulling strength.",
+name: "Back Lever",
+description: "Prepare your shoulders, core and back.",
 stages: [
 "Dead hangs — practise a comfortable grip.",
-"Scapular pull-ups — practise controlled shoulder movement.",
+"Scapular pull-ups — practise shoulder movement.",
+"Dead bugs — practise core control.",
+"Glute bridges — practise hip stability.",
+"Reverse plank holds — practise posterior-chain strength.",
+"Australian rows — practise controlled pulling."
+]
+},
+{
+name: "Planche",
+description: "Build wrist, shoulder and pushing strength.",
+stages: [
+"Wrist circles — gently warm up your wrists.",
+"Wall push-ups — practise pushing strength.",
+"High plank holds — practise stable body alignment.",
+"Scapular push-ups — practise shoulder blade movement.",
+"Knee push-ups — practise controlled pushing.",
+"Bear holds — practise shoulder support and stability."
+]
+},
+{
+name: "L-Sit",
+description: "Build core strength and comfortable leg compression.",
+stages: [
+"Dead bugs — practise core control.",
+"Seated knee raises — practise lifting your knees.",
+"Seated leg lifts — practise controlled leg movement.",
+"Glute bridges — practise hip stability.",
+"Support holds on stable, suitable handles.",
+"Tuck support holds — practise briefly lifting your feet."
+]
+},
+{
+name: "Pull-ups",
+description: "Build pulling strength from the beginning.",
+stages: [
+"Shoulder circles — gently warm up.",
+"Dead hangs — practise a comfortable grip.",
+"Scapular pull-ups — practise shoulder movement.",
 "Australian rows — pull your chest towards a stable bar.",
 "Assisted pull-ups — use a safe assistance method.",
 "Controlled pull-up practice with assistance when needed."
 ]
 },
-
 {
 name: "Push-ups",
-description: "Beginner exercises for pushing strength.",
+description: "Build pushing strength and body control.",
 stages: [
 "Wall push-ups — practise body alignment.",
 "High incline push-ups — use a stable elevated surface.",
 "Lower incline push-ups — gradually practise a lower angle.",
 "Knee push-ups — practise controlled movement.",
-"Full push-ups — practise only when you can maintain good form."
+"Full push-ups — practise only when your form is comfortable.",
+"Controlled push-ups — practise steady, comfortable repetitions."
 ]
 },
-
 {
 name: "Pistol Squat",
-description: "Beginner balance and single-leg strength exercises.",
+description: "Build balance and single-leg strength.",
 stages: [
 "Bodyweight squats — practise comfortable depth.",
+"Single-leg balance — practise stability.",
 "Supported split squats — practise balance and control.",
-"Reverse lunges — use controlled movement.",
-"Single-leg balance holds — practise stability.",
+"Reverse lunges — practise controlled movement.",
+"Sit-to-stand from a suitable chair — practise leg strength.",
 "Supported single-leg squats to a suitable chair."
 ]
 },
-
 {
 name: "Dragon Flag",
-description: "Beginner core stability and abdominal exercises.",
+description: "Build beginner core stability.",
 stages: [
 "Dead bugs — practise controlled core movement.",
 "Bird dogs — practise balance and stability.",
 "Glute bridges — practise hip control.",
 "Reverse crunches — use a comfortable range.",
-"Plank holds — practise keeping your body aligned."
+"Plank holds — practise body alignment.",
+"Side plank from knees — practise lateral core stability."
 ]
 },
-
 {
 name: "Human Flag",
-description: "Beginner lateral core and shoulder preparation.",
+description: "Prepare your shoulders and side core.",
 stages: [
-"Side plank from knees — practise lateral core stability.",
+"Side plank from knees — practise lateral stability.",
+"Bird dogs — practise full-body control.",
+"Wall push-ups — practise pushing strength.",
+"Australian rows — practise controlled pulling.",
 "Full side planks — practise comfortable body alignment.",
-"Bird dogs — practise full-body stability.",
-"Wall push-ups — practise controlled pushing.",
-"Supported rows — practise controlled pulling."
+"Shoulder mobility exercises — practise gentle, controlled movement."
 ]
 },
-
 {
 name: "V-Sit",
-description: "Beginner core and flexibility preparation.",
+description: "Build core strength and comfortable flexibility.",
 stages: [
-"Seated knee raises — practise controlled movement.",
 "Dead bugs — practise core stability.",
+"Seated knee raises — practise controlled movement.",
 "Seated leg lifts — practise comfortable compression.",
+"Glute bridges — practise hip control.",
 "Seated forward reaches — use gentle, comfortable mobility.",
 "Tuck support holds — practise supporting your body."
 ]
 }
 ];
-
 
 /* STORAGE */
 
@@ -564,12 +543,15 @@ let completed = readStorage("calisthenics_completed", {});
 let workouts = readStorage("calisthenics_workouts", []);
 
 function save() {
-  localStorage.setItem("calisthenics_completed", JSON.stringify(completed));
-  localStorage.setItem("calisthenics_workouts", JSON.stringify(workouts));
+  try {
+    localStorage.setItem("calisthenics_completed", JSON.stringify(completed));
+    localStorage.setItem("calisthenics_workouts", JSON.stringify(workouts));
+  } catch (error) {
+    console.error("Could not save data:", error);
+  }
 }
 
-
-/* HTML ESCAPING */
+/* SAFE TEXT */
 
 function safe(value) {
   return String(value).replace(/[&<>"']/g, char => ({
@@ -580,7 +562,6 @@ function safe(value) {
     "'": "&#039;"
   })[char]);
 }
-
 
 /* NAVIGATION */
 
@@ -604,7 +585,6 @@ document.querySelectorAll("nav button").forEach(button => {
   button.addEventListener("click", () => showScreen(button.dataset.tab));
 });
 
-
 /* SKILL LIST */
 
 const skillGrid = document.getElementById("skillGrid");
@@ -622,17 +602,20 @@ function renderSkillList() {
     return;
   }
 
-  skillGrid.innerHTML = filtered.map((skill, index) => {
+  skillGrid.innerHTML = filtered.map(skill => {
     const saved = completed[skill.name] || [];
     const amount = saved.length;
     const total = skill.stages.length;
     const percent = Math.round(amount / total * 100);
 
     return `
-      <button class="skill-button" type="button" data-skill-index="${skills.indexOf(skill)}">
+      <button class="skill-button" type="button"
+        data-skill-index="${skills.indexOf(skill)}">
         <strong>${safe(skill.name)}</strong>
         <span>${safe(skill.description)}</span>
-        <span class="skill-progress-text">${amount}/${total} stages completed · ${percent}%</span>
+        <span class="skill-progress-text">
+          ${amount}/${total} exercises completed · ${percent}%
+        </span>
       </button>
     `;
   }).join("");
@@ -641,17 +624,17 @@ function renderSkillList() {
 skillGrid.addEventListener("click", event => {
   const button = event.target.closest("[data-skill-index]");
   if (!button) return;
-
   openSkill(Number(button.dataset.skillIndex));
 });
 
 document.getElementById("search").addEventListener("input", renderSkillList);
 
-
 /* INDIVIDUAL SKILL PAGE */
 
 function openSkill(index) {
   currentSkill = skills[index];
+
+  if (!currentSkill) return;
 
   document.getElementById("detailTitle").textContent = currentSkill.name;
   document.getElementById("detailDescription").textContent = currentSkill.description;
@@ -669,7 +652,7 @@ function renderSkillDetail() {
   const percent = Math.round(amount / total * 100);
 
   document.getElementById("detailCount").textContent =
-    amount + " of " + total + " stages completed · " + percent + "%";
+    amount + " of " + total + " exercises completed · " + percent + "%";
 
   document.getElementById("detailProgress").style.width = percent + "%";
 
@@ -683,7 +666,7 @@ function renderSkillDetail() {
           ${saved.includes(index) ? "checked" : ""}
         >
         <label for="stage${index}">
-          <span class="stage-number">STAGE ${index + 1}</span>
+          <span class="stage-number">EXERCISE ${index + 1}</span>
           ${safe(stage)}
         </label>
       </div>
@@ -714,7 +697,6 @@ document.getElementById("backButton").addEventListener("click", () => {
   showScreen("skills");
 });
 
-
 /* WORKOUT LOG */
 
 document.getElementById("date").value =
@@ -734,6 +716,7 @@ document.getElementById("workoutForm").addEventListener("submit", event => {
 
   save();
   event.target.reset();
+
   document.getElementById("date").value =
     new Date().toLocaleDateString("en-CA");
 
@@ -750,11 +733,10 @@ function renderWorkouts() {
 
   container.innerHTML = workouts.map(workout => `
     <div class="log-entry">
-      <button class="delete-button" type="button" data-delete="${workout.id}">
-        Delete
-      </button>
+      <button class="delete-button" type="button"
+        data-delete="${Number(workout.id)}">Delete</button>
       <strong>${safe(workout.exercise)}</strong>
-      <p>${safe(workout.date)} · ${workout.sets} sets · ${workout.reps} reps</p>
+      <p>${safe(workout.date)} · ${Number(workout.sets)} sets · ${Number(workout.reps)} reps</p>
       ${workout.notes ? `<p>${safe(workout.notes)}</p>` : ""}
     </div>
   `).join("");
@@ -770,7 +752,6 @@ document.getElementById("workoutHistory").addEventListener("click", event => {
   save();
   renderWorkouts();
 });
-
 
 /* PROGRESS */
 
@@ -805,7 +786,6 @@ function renderProgress() {
       `;
     }).join("");
 }
-
 
 /* START */
 
