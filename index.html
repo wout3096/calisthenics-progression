@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#111111">
+<meta name="theme-color" content="#101010">
 <title>Calisthenics Pro</title>
 
 <style>
@@ -73,7 +73,7 @@ nav button,.secondary {
 
 nav button.active {
   background:var(--green);
-  color:#111111;
+  color:#111;
   border-color:var(--green);
 }
 
@@ -255,7 +255,7 @@ input,textarea {
 
 .primary {
   background:var(--green);
-  color:#111111;
+  color:#111;
   border:0;
   padding:12px 17px;
   border-radius:8px;
@@ -358,10 +358,6 @@ input,textarea {
   margin-top:10px;
 }
 
-.rank-progress {
-  margin-top:12px;
-}
-
 .rank-guide {
   padding:15px;
   background:var(--panel2);
@@ -369,6 +365,119 @@ input,textarea {
   margin-top:15px;
   font-size:13px;
   line-height:1.8;
+}
+
+/* TRAINING CALENDAR */
+
+.calendar {
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+  margin-bottom:18px;
+}
+
+.calendar-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.calendar-header button {
+  background:var(--panel2);
+  color:var(--text);
+  border:1px solid var(--border);
+  padding:9px 13px;
+  border-radius:7px;
+}
+
+.calendar-grid {
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:5px;
+}
+
+.calendar-day {
+  min-height:48px;
+  border:1px solid var(--border);
+  border-radius:7px;
+  background:var(--panel2);
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  font-size:13px;
+  min-width:0;
+}
+
+.calendar-day.empty-day {
+  background:transparent;
+  border-color:transparent;
+}
+
+.calendar-day.selected {
+  border:2px solid var(--green);
+}
+
+.calendar-day.today {
+  color:var(--green);
+  font-weight:bold;
+}
+
+.calendar-day.planned {
+  background:#33251c;
+}
+
+.calendar-day.completed {
+  border-color:var(--green);
+}
+
+.calendar-dot {
+  font-size:10px;
+  color:var(--green);
+}
+
+.day-name {
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+  padding:7px 0;
+}
+
+.planner-days {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(85px,1fr));
+  gap:8px;
+  margin-top:12px;
+}
+
+.planner-day {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  background:var(--panel2);
+  padding:11px;
+  border-radius:8px;
+  font-size:13px;
+}
+
+.planner-day input {
+  width:17px;
+  height:17px;
+  accent-color:var(--green);
+}
+
+.calendar-legend {
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:14px;
 }
 
 footer {
@@ -380,7 +489,15 @@ footer {
 }
 
 @media(max-width:500px) {
-  nav button { flex:1; padding:10px 7px; }
+  nav button {
+    flex:1;
+    padding:10px 7px;
+  }
+
+  .calendar-day {
+    min-height:42px;
+    font-size:12px;
+  }
 }
 </style>
 </head>
@@ -404,6 +521,8 @@ footer {
 
 <main>
 
+<!-- SKILLS -->
+
 <section id="skills" class="screen active">
 <h2>Skill Library</h2>
 <p class="description">Choose a skill and work through its three levels.</p>
@@ -411,15 +530,20 @@ footer {
 <div class="grid" id="skillGrid"></div>
 </section>
 
+<!-- SKILL DETAILS -->
+
 <section id="detail" class="screen">
 <button class="secondary" id="back">← Back to skills</button>
+
 <div class="panel" style="margin-top:18px">
 <h2 id="skillTitle"></h2>
 <p class="muted" id="skillDescription"></p>
 <p id="skillStats" class="muted"></p>
+
 <div class="progress-track">
 <div class="progress-fill" id="skillBar"></div>
 </div>
+
 <div id="levels"></div>
 </div>
 </section>
@@ -429,16 +553,15 @@ footer {
 <section id="rankings" class="screen">
 
 <h2>🏆 Strength Rankings</h2>
-
 <p class="description">
 Enter your best clean repetitions to discover your rank.
-Each exercise has its own ranking.
 </p>
 
 <div id="rankingCards"></div>
 
 <div class="panel">
 <h3>Ranking Guide</h3>
+
 <div class="rank-guide">
 🟤 <strong>Beginner</strong> — Starting your journey<br>
 🥉 <strong>Bronze</strong> — Building consistency<br>
@@ -457,11 +580,50 @@ For handstand push-ups, use an appropriate supervised progression.
 
 </section>
 
+<!-- WORKOUT PLANNER -->
+
 <section id="workouts" class="screen">
-<h2>Workout Log</h2>
-<p class="description">Record your training sessions.</p>
+
+<h2>Training Planner</h2>
+<p class="description">
+Plan your training week, track completed workouts and view your history.
+</p>
 
 <div class="panel">
+<h3>📅 Your Training Days</h3>
+<p class="muted">Choose the days you plan to train each week.</p>
+
+<div class="planner-days" id="plannerDays"></div>
+
+<p class="muted" style="font-size:12px">
+Your schedule is saved automatically. Rest days are important too!
+</p>
+</div>
+
+<div class="calendar">
+<div class="calendar-header">
+<button type="button" id="previousMonth">←</button>
+<strong id="calendarMonth"></strong>
+<button type="button" id="nextMonth">→</button>
+</div>
+
+<div class="calendar-grid" id="calendarDays"></div>
+
+<div class="calendar-legend">
+<span>🟠 Planned day</span>
+<span>🟢 Completed workout</span>
+<span>🟡 Selected date</span>
+</div>
+</div>
+
+<div class="panel">
+<h3 id="selectedDateTitle">Selected day</h3>
+<div id="selectedDayWorkouts"></div>
+</div>
+
+<div class="panel">
+<h3>➕ Add Workout</h3>
+
 <form id="workoutForm">
 
 <label class="form-label">Date</label>
@@ -471,29 +633,35 @@ For handstand push-ups, use an appropriate supervised progression.
 <input id="exercise" placeholder="Example: Pull-ups" required>
 
 <label class="form-label">Sets</label>
-<input type="number" id="sets" min="1" required>
+<input type="number" id="sets" min="1" step="1" required>
 
 <label class="form-label">Reps</label>
-<input type="number" id="reps" min="1" required>
+<input type="number" id="reps" min="1" step="1" required>
 
 <label class="form-label">Notes</label>
-<textarea id="notes" rows="3"></textarea>
+<textarea id="notes" rows="3" placeholder="How did your workout go?"></textarea>
 
 <button class="primary" type="submit">Save workout</button>
+
 </form>
 </div>
 
 <div class="panel">
-<h3>Workout History</h3>
+<h3>All Workout History</h3>
 <div id="history"></div>
 </div>
+
 </section>
 
+<!-- PROGRESS -->
+
 <section id="progress" class="screen">
+
 <h2>Your Progress</h2>
 <p class="description">See how far you have progressed.</p>
 
 <div class="stats">
+
 <div class="stat">
 <div class="muted">Skills started</div>
 <div class="number" id="started">0</div>
@@ -508,12 +676,14 @@ For handstand push-ups, use an appropriate supervised progression.
 <div class="muted">Workouts</div>
 <div class="number" id="workoutTotal">0</div>
 </div>
+
 </div>
 
 <div class="panel">
 <h3>All Skill Progress</h3>
 <div id="allProgress"></div>
 </div>
+
 </section>
 
 </main>
@@ -663,12 +833,14 @@ function load(key,fallback) {
 let completed=load("calisthenics_completed",{});
 let workouts=load("calisthenics_workouts",[]);
 let rankings=load("calisthenics_rankings",{});
+let trainingDays=load("calisthenics_training_days",[]);
 
 function save() {
   try {
     localStorage.setItem("calisthenics_completed",JSON.stringify(completed));
     localStorage.setItem("calisthenics_workouts",JSON.stringify(workouts));
     localStorage.setItem("calisthenics_rankings",JSON.stringify(rankings));
+    localStorage.setItem("calisthenics_training_days",JSON.stringify(trainingDays));
   } catch(error) {
     alert("Your browser could not save the data.");
   }
@@ -686,6 +858,7 @@ function escapeHTML(value) {
 
 function today() {
   const d=new Date();
+
   return [
     d.getFullYear(),
     String(d.getMonth()+1).padStart(2,"0"),
@@ -708,8 +881,14 @@ function showScreen(id) {
 
   if(id==="skills") renderSkills();
   if(id==="rankings") renderRankings();
+
+  if(id==="workouts") {
+    renderPlannerDays();
+    renderCalendar();
+    renderHistory();
+  }
+
   if(id==="progress") renderProgress();
-  if(id==="workouts") renderHistory();
 }
 
 document.querySelectorAll("nav button").forEach(button=>{
@@ -927,9 +1106,7 @@ function getRank(exercise,reps) {
   let current=exercise.levels[0];
 
   for(const level of exercise.levels) {
-    if(reps>=level.min) {
-      current=level;
-    }
+    if(reps>=level.min) current=level;
   }
 
   return current;
@@ -1010,53 +1187,249 @@ document.getElementById("rankingCards").addEventListener("change",event=>{
   renderRankings();
 });
 
-/* WORKOUT LOG - MANUAL ENTRIES ONLY */
+/* TRAINING PLANNER */
+
+let calendarDate=new Date();
+let selectedDate=today();
+
+function renderPlannerDays() {
+  const names=[
+    "Monday","Tuesday","Wednesday",
+    "Thursday","Friday","Saturday","Sunday"
+  ];
+
+  document.getElementById("plannerDays").innerHTML=
+    names.map((name,index)=>`
+      <label class="planner-day">
+        <input
+          type="checkbox"
+          data-planned-day="${index}"
+          ${trainingDays.includes(index)?"checked":""}
+        >
+        ${name}
+      </label>
+    `).join("");
+}
+
+document.getElementById("plannerDays").addEventListener("change",event=>{
+  if(!event.target.matches("[data-planned-day]")) return;
+
+  const day=Number(event.target.dataset.plannedDay);
+
+  if(event.target.checked) {
+    if(!trainingDays.includes(day)) trainingDays.push(day);
+  } else {
+    trainingDays=trainingDays.filter(x=>x!==day);
+  }
+
+  save();
+  renderCalendar();
+});
+
+function dateKey(year,month,day) {
+  return [
+    year,
+    String(month+1).padStart(2,"0"),
+    String(day).padStart(2,"0")
+  ].join("-");
+}
+
+function weekdayIndex(year,month,day) {
+  return (new Date(year,month,day).getDay()+6)%7;
+}
+
+function renderCalendar() {
+  const year=calendarDate.getFullYear();
+  const month=calendarDate.getMonth();
+
+  document.getElementById("calendarMonth").textContent=
+    calendarDate.toLocaleDateString("en-GB",{
+      month:"long",
+      year:"numeric"
+    });
+
+  const firstDay=weekdayIndex(year,month,1);
+  const daysInMonth=new Date(year,month+1,0).getDate();
+
+  const names=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+
+  let html=names.map(name=>
+    `<div class="day-name">${name}</div>`
+  ).join("");
+
+  for(let i=0;i<firstDay;i++) {
+    html+='<div class="calendar-day empty-day"></div>';
+  }
+
+  for(let day=1;day<=daysInMonth;day++) {
+    const key=dateKey(year,month,day);
+    const isToday=key===today();
+    const isSelected=key===selectedDate;
+
+    const planned=trainingDays.includes(
+      weekdayIndex(year,month,day)
+    );
+
+    const hasWorkout=workouts.some(w=>w.date===key);
+
+    const classes=[
+      "calendar-day",
+      isToday?"today":"",
+      isSelected?"selected":"",
+      planned?"planned":"",
+      hasWorkout?"completed":""
+    ].filter(Boolean).join(" ");
+
+    let marker="";
+
+    if(hasWorkout) marker="●";
+    else if(planned) marker="○";
+
+    html+=`
+      <button type="button"
+        class="${classes}"
+        data-calendar-date="${key}"
+        aria-label="${key}${planned?", planned training":""}${hasWorkout?", completed workout":""}">
+        <span>${day}</span>
+        <span class="calendar-dot">${marker}</span>
+      </button>
+    `;
+  }
+
+  document.getElementById("calendarDays").innerHTML=html;
+
+  renderSelectedDay();
+}
+
+document.getElementById("calendarDays").addEventListener("click",event=>{
+  const button=event.target.closest("[data-calendar-date]");
+  if(!button) return;
+
+  selectedDate=button.dataset.calendarDate;
+
+  document.getElementById("date").value=selectedDate;
+
+  renderCalendar();
+});
+
+document.getElementById("previousMonth").addEventListener("click",()=>{
+  calendarDate.setMonth(calendarDate.getMonth()-1);
+  renderCalendar();
+});
+
+document.getElementById("nextMonth").addEventListener("click",()=>{
+  calendarDate.setMonth(calendarDate.getMonth()+1);
+  renderCalendar();
+});
+
+function renderSelectedDay() {
+  const dateWorkouts=workouts.filter(w=>w.date===selectedDate);
+
+  document.getElementById("selectedDateTitle").textContent=
+    new Date(selectedDate+"T12:00:00").toLocaleDateString("en-GB",{
+      weekday:"long",
+      day:"numeric",
+      month:"long",
+      year:"numeric"
+    });
+
+  const container=document.getElementById("selectedDayWorkouts");
+
+  if(!dateWorkouts.length) {
+    container.innerHTML=
+      '<p class="muted">No workouts recorded for this day yet.</p>';
+    return;
+  }
+
+  container.innerHTML=dateWorkouts.map(w=>`
+    <div class="log-entry">
+      <strong>${escapeHTML(w.exercise)}</strong>
+      <p>${Number(w.sets)} sets · ${Number(w.reps)} reps</p>
+      ${w.notes?`<p>${escapeHTML(w.notes)}</p>`:""}
+    </div>
+  `).join("");
+}
+
+/* WORKOUT FORM */
 
 document.getElementById("date").value=today();
+
+document.getElementById("date").addEventListener("change",event=>{
+  if(!event.target.value) return;
+
+  selectedDate=event.target.value;
+
+  const parts=selectedDate.split("-").map(Number);
+
+  calendarDate=new Date(parts[0],parts[1]-1,1);
+
+  renderCalendar();
+});
 
 document.getElementById("workoutForm").addEventListener("submit",event=>{
   event.preventDefault();
 
+  const date=document.getElementById("date").value;
+  const sets=Number(document.getElementById("sets").value);
+  const reps=Number(document.getElementById("reps").value);
+
+  if(!date || !Number.isInteger(sets) || sets<1 ||
+     !Number.isInteger(reps) || reps<1) {
+    alert("Please enter a valid date, sets and reps.");
+    return;
+  }
+
   workouts.unshift({
     id:Date.now(),
-    date:document.getElementById("date").value,
+    date:date,
     exercise:document.getElementById("exercise").value,
-    sets:Number(document.getElementById("sets").value),
-    reps:Number(document.getElementById("reps").value),
+    sets:sets,
+    reps:reps,
     notes:document.getElementById("notes").value
   });
+
+  selectedDate=date;
+
+  const parts=date.split("-").map(Number);
+  calendarDate=new Date(parts[0],parts[1]-1,1);
 
   save();
 
   event.target.reset();
-  document.getElementById("date").value=today();
+  document.getElementById("date").value=date;
 
+  renderCalendar();
   renderHistory();
   renderProgress();
 });
+
+/* WORKOUT HISTORY */
 
 function renderHistory() {
   const container=document.getElementById("history");
 
   if(!workouts.length) {
-    container.innerHTML='<p class="empty">No workouts recorded yet.</p>';
+    container.innerHTML=
+      '<p class="empty">No workouts recorded yet.</p>';
     return;
   }
 
   container.innerHTML=workouts.map(workout=>`
     <div class="log-entry">
-      <button class="delete" data-delete="${Number(workout.id)}">Delete</button>
+      <button class="delete" data-delete="${Number(workout.id)}">
+        Delete
+      </button>
 
       <strong>${escapeHTML(workout.exercise)}</strong>
 
       <p>${escapeHTML(workout.date)}</p>
 
       ${workout.type==="progression"
-        ? '<p>✓ Skill progression completed</p>'
+        ? '<p>Skill progression completed</p>'
         : `<p>${Number(workout.sets)} sets · ${Number(workout.reps)} reps</p>`
       }
 
-      ${workout.notes ? `<p>${escapeHTML(workout.notes)}</p>` : ""}
+      ${workout.notes?`<p>${escapeHTML(workout.notes)}</p>`:""}
     </div>
   `).join("");
 }
@@ -1067,10 +1440,12 @@ document.getElementById("history").addEventListener("click",event=>{
 
   const id=Number(button.dataset.delete);
 
-  workouts=workouts.filter(workout=>workout.id!==id);
+  workouts=workouts.filter(w=>w.id!==id);
 
   save();
+
   renderHistory();
+  renderCalendar();
   renderProgress();
 });
 
@@ -1114,21 +1489,12 @@ function renderProgress() {
 
 /* INITIALISE */
 
-try {
-  renderSkills();
-  renderRankings();
-  renderHistory();
-  renderProgress();
-} catch(error) {
-  document.body.insertAdjacentHTML(
-    "afterbegin",
-    `<div style="background:#401818;color:white;padding:15px">
-      Something went wrong: ${escapeHTML(error.message)}
-    </div>`
-  );
-
-  console.error(error);
-}
+renderSkills();
+renderRankings();
+renderPlannerDays();
+renderCalendar();
+renderHistory();
+renderProgress();
 
 </script>
 
