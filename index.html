@@ -829,31 +829,30 @@ renderHistory();
 });
 
 function renderHistory(){
-const container=document.getElementById("history");
+  const container=document.getElementById("history");
 
-if(!workouts.length){
-container.innerHTML='<p class="empty">No workouts recorded yet.</p>';
-return;
+  if(!workouts.length){
+    container.innerHTML='<p class="empty">No workouts recorded yet.</p>';
+    return;
+  }
+
+  container.innerHTML=workouts.map(w=>`
+    <div class="log-entry">
+      <button class="delete" data-delete="${Number(w.id)}">Delete</button>
+
+      <strong>${escapeHTML(w.exercise)}</strong>
+
+      <p>${escapeHTML(w.date)}</p>
+
+      ${w.type==="progression"
+        ?'<p>✓ Skill progression completed</p>'
+        :`<p>${Number(w.sets)} sets · ${Number(w.reps)} reps</p>`
+      }
+
+      ${w.notes?`<p>${escapeHTML(w.notes)}</p>`:""}
+    </div>
+  `).join("");
 }
-
-container.innerHTML=workouts.map(w=>`
-<div class="log-entry">
-<button class="delete" data-delete="${Number(w.id)}">Delete</button>
-<strong>${escapeHTML(w.exercise)}</strong>
-<p>${escapeHTML(w.date)} · ${Number(w.sets)} sets · ${Number(w.reps)} reps</p>
-${w.notes?`<p>${escapeHTML(w.notes)}</p>`:""}
-</div>`).join("");
-}
-
-document.getElementById("history").addEventListener("click",e=>{
-const button=e.target.closest("[data-delete]");
-if(!button)return;
-if(!confirm("Delete this workout?"))return;
-workouts=workouts.filter(w=>w.id!==Number(button.dataset.delete));
-save();
-renderHistory();
-});
-
 /* PROGRESS DASHBOARD */
 
 function renderProgress(){
