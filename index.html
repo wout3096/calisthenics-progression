@@ -321,6 +321,56 @@ input,textarea {
   text-align:center;
 }
 
+/* RANKINGS */
+
+.rank-card {
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:19px;
+  margin-bottom:15px;
+}
+
+.rank-card h3 {
+  margin-top:0;
+  margin-bottom:6px;
+}
+
+.rank-card input {
+  margin-top:12px;
+  max-width:200px;
+}
+
+.rank-badge {
+  display:inline-block;
+  margin-top:12px;
+  padding:9px 15px;
+  border-radius:20px;
+  background:var(--panel2);
+  border:1px solid var(--green);
+  color:var(--green);
+  font-weight:bold;
+}
+
+.rank-next {
+  color:var(--muted);
+  font-size:13px;
+  margin-top:10px;
+}
+
+.rank-progress {
+  margin-top:12px;
+}
+
+.rank-guide {
+  padding:15px;
+  background:var(--panel2);
+  border-radius:9px;
+  margin-top:15px;
+  font-size:13px;
+  line-height:1.8;
+}
+
 footer {
   text-align:center;
   color:var(--muted);
@@ -345,6 +395,7 @@ footer {
 
 <nav>
 <button class="active" data-screen="skills">Skills</button>
+<button data-screen="rankings">🏆 Rankings</button>
 <button data-screen="workouts">Workout Log</button>
 <button data-screen="progress">Progress</button>
 </nav>
@@ -371,6 +422,39 @@ footer {
 </div>
 <div id="levels"></div>
 </div>
+</section>
+
+<!-- RANKINGS -->
+
+<section id="rankings" class="screen">
+
+<h2>🏆 Strength Rankings</h2>
+
+<p class="description">
+Enter your best clean repetitions to discover your rank.
+Each exercise has its own ranking.
+</p>
+
+<div id="rankingCards"></div>
+
+<div class="panel">
+<h3>Ranking Guide</h3>
+<div class="rank-guide">
+🟤 <strong>Beginner</strong> — Starting your journey<br>
+🥉 <strong>Bronze</strong> — Building consistency<br>
+🥈 <strong>Silver</strong> — Developing strength<br>
+🥇 <strong>Gold</strong> — Strong performance<br>
+💎 <strong>Diamond</strong> — Advanced performance<br>
+👑 <strong>Elite</strong> — Exceptional performance
+</div>
+
+<p class="muted" style="font-size:12px;margin-top:15px">
+Ranks are personal milestones, not comparisons with other athletes.
+Only count controlled repetitions using consistent technique.
+For handstand push-ups, use an appropriate supervised progression.
+</p>
+</div>
+
 </section>
 
 <section id="workouts" class="screen">
@@ -578,11 +662,13 @@ function load(key,fallback) {
 
 let completed=load("calisthenics_completed",{});
 let workouts=load("calisthenics_workouts",[]);
+let rankings=load("calisthenics_rankings",{});
 
 function save() {
   try {
     localStorage.setItem("calisthenics_completed",JSON.stringify(completed));
     localStorage.setItem("calisthenics_workouts",JSON.stringify(workouts));
+    localStorage.setItem("calisthenics_rankings",JSON.stringify(rankings));
   } catch(error) {
     alert("Your browser could not save the data.");
   }
@@ -621,6 +707,7 @@ function showScreen(id) {
   });
 
   if(id==="skills") renderSkills();
+  if(id==="rankings") renderRankings();
   if(id==="progress") renderProgress();
   if(id==="workouts") renderHistory();
 }
@@ -792,6 +879,137 @@ document.getElementById("back").addEventListener("click",()=>{
   showScreen("skills");
 });
 
+/* RANKING SYSTEM */
+
+const rankingExercises = [
+  {
+    id:"pullups",
+    name:"Pull-ups",
+    description:"Enter your best clean pull-up repetitions.",
+    levels:[
+      {min:0,name:"Beginner",emoji:"🟤"},
+      {min:3,name:"Bronze",emoji:"🥉"},
+      {min:6,name:"Silver",emoji:"🥈"},
+      {min:10,name:"Gold",emoji:"🥇"},
+      {min:15,name:"Diamond",emoji:"💎"},
+      {min:21,name:"Elite",emoji:"👑"}
+    ]
+  },
+  {
+    id:"pushups",
+    name:"Push-ups",
+    description:"Enter your best clean push-up repetitions.",
+    levels:[
+      {min:0,name:"Beginner",emoji:"🟤"},
+      {min:10,name:"Bronze",emoji:"🥉"},
+      {min:20,name:"Silver",emoji:"🥈"},
+      {min:35,name:"Gold",emoji:"🥇"},
+      {min:50,name:"Diamond",emoji:"💎"},
+      {min:70,name:"Elite",emoji:"👑"}
+    ]
+  },
+  {
+    id:"handstandPushups",
+    name:"Handstand Push-ups",
+    description:"Count controlled repetitions using a safe, appropriate progression.",
+    levels:[
+      {min:0,name:"Beginner",emoji:"🟤"},
+      {min:1,name:"Bronze",emoji:"🥉"},
+      {min:2,name:"Silver",emoji:"🥈"},
+      {min:4,name:"Gold",emoji:"🥇"},
+      {min:6,name:"Diamond",emoji:"💎"},
+      {min:9,name:"Elite",emoji:"👑"}
+    ]
+  }
+];
+
+function getRank(exercise,reps) {
+  let current=exercise.levels[0];
+
+  for(const level of exercise.levels) {
+    if(reps>=level.min) {
+      current=level;
+    }
+  }
+
+  return current;
+}
+
+function getNextRank(exercise,reps) {
+  return exercise.levels.find(level=>level.min>reps);
+}
+
+function renderRankings() {
+  const container=document.getElementById("rankingCards");
+
+  container.innerHTML=rankingExercises.map(exercise=>{
+    const reps=Number(rankings[exercise.id] || 0);
+    const rank=getRank(exercise,reps);
+    const next=getNextRank(exercise,reps);
+
+    const nextText=next
+      ? `${next.min-reps} more clean reps to reach ${next.name}.`
+      : "You've reached the highest rank!";
+
+    const progress=next
+      ? Math.min(100,Math.round(
+          ((reps-rank.min)/(next.min-rank.min))*100
+        ))
+      : 100;
+
+    return `
+      <div class="rank-card">
+        <h3>${exercise.name}</h3>
+        <p class="muted">${exercise.description}</p>
+
+        <label class="form-label" for="rank-${exercise.id}">
+          Your best repetitions
+        </label>
+
+        <input
+          type="number"
+          id="rank-${exercise.id}"
+          data-rank="${exercise.id}"
+          min="0"
+          max="10000"
+          step="1"
+          value="${reps}"
+        >
+
+        <div class="rank-badge">
+          ${rank.emoji} ${rank.name}
+        </div>
+
+        <div class="rank-progress">
+          <div class="progress-track">
+            <div class="progress-fill" style="width:${progress}%"></div>
+          </div>
+        </div>
+
+        <p class="rank-next">${nextText}</p>
+      </div>
+    `;
+  }).join("");
+}
+
+document.getElementById("rankingCards").addEventListener("change",event=>{
+  if(!event.target.matches("[data-rank]")) return;
+
+  const id=event.target.dataset.rank;
+  const value=Number(event.target.value);
+
+  if(!Number.isInteger(value) || value<0 || value>10000) {
+    alert("Please enter a whole number between 0 and 10,000.");
+    event.target.value=rankings[id] || 0;
+    return;
+  }
+
+  rankings[id]=value;
+
+  save();
+  renderRankings();
+});
+
 /* WORKOUT LOG - MANUAL ENTRIES ONLY */
 
 document.getElementById("date").value=today();
@@ -898,6 +1116,7 @@ function renderProgress() {
 
 try {
   renderSkills();
+  renderRankings();
   renderHistory();
   renderProgress();
 } catch(error) {
